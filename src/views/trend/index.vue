@@ -5,11 +5,11 @@
       <aside class="flex justify-end">
         <el-descriptions>
           <el-descriptions-item label="总数:">
-            <span class=" text-lg">{{ total }}</span>
+            <span class="text-lg">{{ total }}</span>
           </el-descriptions-item>
         </el-descriptions>
       </aside>
-      <el-table stripe :data="list" style="width: 100%">
+      <el-table stripe :data="list" style="width: 100%" :height="height">
         <el-table-column label="标题" width="400">
           <template #default="props">
             <div>
@@ -127,6 +127,12 @@
 import { useGetListNotLogin } from "../../hooks/useGetList";
 import Countdown from "vue3-countdown";
 import { formatMoment, isPositive, isLessThan } from "../../utils";
+import { HEIGHT_CONTAINER } from "../../constants";
+import { computed } from "vue";
 
 const { isLoading, list, total } = useGetListNotLogin();
+
+const height = computed(() => {
+  return window.innerHeight - HEIGHT_CONTAINER;
+});
 </script>
