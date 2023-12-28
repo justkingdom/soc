@@ -13,7 +13,10 @@
       ></router-link
     >
     <router-link to="/trend">
-      <el-menu-item index="2" class="text-lg"> 趋势 </el-menu-item>
+      <el-menu-item index="2" class="text-lg">趋势</el-menu-item>
+    </router-link>
+    <router-link to="/rank">
+      <el-menu-item index="3" class="text-lg">排行</el-menu-item>
     </router-link>
   </el-menu>
   <article class="p-4">
