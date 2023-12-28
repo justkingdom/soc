@@ -2,7 +2,7 @@ import http from '../service/request';
 
 const PREFIX = 'qa/v1';
 
-export async function fetchList(params: PageParams) {
+export async function fetchListNotLogin(params: PageParams) {
   return http.request<BaseResponse<ListData<any>>>({
     url: `${PREFIX}/home/notLogin`,
     method: "get",

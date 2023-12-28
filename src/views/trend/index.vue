@@ -121,18 +121,12 @@
       </el-table>
     </div>
   </article>
-  <el-backtop :right="100" :bottom="100" />
 </template>
 
 <script setup lang="ts">
-import { useGetListHot } from "../hooks/useGetList";
+import { useGetListNotLogin } from "../../hooks/useGetList";
 import Countdown from "vue3-countdown";
-import { formatMoment, isPositive, isLessThan } from "../utils";
-// import { watchEffect } from "vue";
+import { formatMoment, isPositive, isLessThan } from "../../utils";
 
-const { isLoading, list, total } = useGetListHot();
-
-// watchEffect(() => {
-//   console.log("isLoading: ", isLoading.value);
-// });
+const { isLoading, list, total } = useGetListNotLogin();
 </script>

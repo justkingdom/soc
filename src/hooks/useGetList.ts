@@ -1,5 +1,5 @@
 import { onMounted, ref, watchEffect } from "vue";
-import { fetchListHomeB, fetchListHot } from "../apis/list";
+import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
 import { sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
 
@@ -109,7 +109,7 @@ export function useGetList() {
 export function useGetListHot() {
   const list = ref(null as Array<ListItem> | null);
   const isLoading = ref(true);
-  const total = ref(null as number | null);
+  const total = ref(0);
 
   const fetchData = async () => {
     const { data } = await fetchListHot({
@@ -141,6 +141,43 @@ export function useGetListHot() {
 
   return {
     isLoading,
-    list
+    list,
+    total
+  };
+}
+
+export function useGetListNotLogin() {
+  const list = ref(null as Array<ListItem> | null);
+  const isLoading = ref(true);
+  const total = ref(0);
+
+  const fetchData = async () => {
+    const { data } = await fetchListNotLogin({
+      page: 1,
+      pageSize: 20,
+    });
+    const _records = data.records.map((item) => {
+      return {
+        ...item,
+      }
+    });
+    list.value = sortBy(_records, item => item.endCountdown);
+    total.value = _records.length;
+  }
+
+  onMounted(async () => {
+    isLoading.value = true;
+    await fetchData();
+    isLoading.value = false;
+  });
+
+  useIntervalFn(() => {
+    fetchData();
+  }, 30000);
+
+  return {
+    isLoading,
+    list,
+    total
   };
 }
