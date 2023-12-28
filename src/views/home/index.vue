@@ -1,15 +1,21 @@
 <template>
-  <article>
+  <article class="mx-auto w-fit">
     <el-skeleton :rows="20" animated v-if="isLoading" />
     <el-table stripe :data="list" style="width: 100%" v-else>
       <el-table-column label="标题" width="400">
         <template #default="props">
-          <a
-            :href="`https://app.socrates.com/answer-detail?qID=${props.row.qID}`"
-            target="_blank"
-          >
-            {{ props.row.title }}
-          </a>
+          <div>
+            <a
+              v-if="props.row.auth === 'all'"
+              :href="`https://app.socrates.com/answer-detail?qID=${props.row.qID}`"
+              target="_blank"
+            >
+              {{ props.row.title }}
+            </a>
+            <p class="text-gray-400 line-through" v-else>
+              {{ props.row.title }}
+            </p>
+          </div>
           <p>{{ props.row.qID }}</p>
         </template>
       </el-table-column>
@@ -20,13 +26,23 @@
               <p class="flex space-x-2">
                 <span>{{ item.k }}</span>
                 <span>{{ item.v }}</span>
-                <span>{{ item.opsVoteTotal }}</span>
                 <el-tag type="info" v-if="isPositive(item.opsVoteTotal)">{{
                   item.opsVoteTotal
                 }}</el-tag>
               </p>
             </div>
           </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="作者" width="120">
+        <template #default="props">
+          <a
+            v-if="props.row.auth === 'all'"
+            :href="`https://app.socrates.com/profile?account=${props.row.account.account}`"
+            target="_blank"
+          >
+            {{ props.row.account.nickname }}
+          </a>
         </template>
       </el-table-column>
       <el-table-column
@@ -64,7 +80,14 @@
         align="right"
         sortable
       />
-      <el-table-column label="创建时间" width="200" align="right" >
+      <el-table-column label="阶段" width="100" align="right">
+        <template #default="props">
+          <el-tag v-if="isLessThan(props.row.voters, 20)" type="warning"
+            >辩论</el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" width="200" align="right">
         <template #default="props">
           <p>{{ formatMoment(props.row.createTime) }}</p>
         </template>
@@ -86,17 +109,18 @@
       </el-table-column>
     </el-table>
   </article>
+  <el-backtop :right="100" :bottom="100" />
 </template>
 
 <script setup lang="ts">
 import { useGetListHot } from "../../hooks/useGetList";
 import Countdown from "vue3-countdown";
-import { formatMoment, isPositive } from "../../utils";
-import { watchEffect } from "vue";
+import { formatMoment, isPositive, isLessThan } from "../../utils";
+// import { watchEffect } from "vue";
 
 const { isLoading, list } = useGetListHot();
 
-watchEffect(() => {
-  console.log("isLoading: ", isLoading.value);
-});
+// watchEffect(() => {
+//   console.log("isLoading: ", isLoading.value);
+// });
 </script>

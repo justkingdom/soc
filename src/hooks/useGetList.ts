@@ -1,12 +1,12 @@
 import { onMounted, ref, watchEffect } from "vue";
 import { fetchListHomeB, fetchListHot } from "../apis/list";
-import _, { sortBy } from "lodash";
-import { useInterval, useIntervalFn } from "@vueuse/core";
+import { sortBy } from "lodash";
+import { useIntervalFn } from "@vueuse/core";
 
 interface IOps {
   k: string;
   v: string;
-  opsVoteTotal: 1739;
+  opsVoteTotal: number;
   opsVoteTotalSnapshot: string | null;
   opsVoteTotalFinal: string | null;
   voteTrend: Object;
@@ -99,7 +99,7 @@ export function useGetList() {
       page: 1,
       pageSize: 100,
     });
-    console.log("data: ", data);
+    // console.log("data: ", data);
     list.value = data;
   });
 
@@ -118,7 +118,7 @@ export function useGetListHot() {
       version: 0,
       sortBySpendPoint: 0,
     });
-    console.log("data: ", data);
+    // console.log("data: ", data);
     const _records = data.records.map((item) => {
       return {
         ...item,
