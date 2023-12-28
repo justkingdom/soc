@@ -109,6 +109,7 @@ export function useGetList() {
 export function useGetListHot() {
   const list = ref(null as Array<ListItem> | null);
   const isLoading = ref(true);
+  const total = ref(null as number | null);
 
   const fetchData = async () => {
     const { data } = await fetchListHot({
@@ -125,6 +126,7 @@ export function useGetListHot() {
       }
     });
     list.value = sortBy(_records, item => item.endCountdown);
+    total.value = _records.length;
   }
 
   onMounted(async () => {
