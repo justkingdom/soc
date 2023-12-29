@@ -150,7 +150,6 @@ import Countdown from "vue3-countdown";
 import {
   formatMoment,
   isPositive,
-  isLessThan,
   isGreaterThanOrEqual,
 } from "../utils";
 import { computed, reactive, watch } from "vue";

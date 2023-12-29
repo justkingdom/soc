@@ -2,7 +2,7 @@ import { onMounted, ref, watchEffect } from "vue";
 import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
 import { isEqual, maxBy, minBy, sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
-import { div, isGreaterThanOrEqual, isLessThanOrEqualTo, multipliedBy } from "../utils";
+import { div, isLessThanOrEqualTo, multipliedBy } from "../utils";
 import { Color, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
 
 interface IOps {
