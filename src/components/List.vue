@@ -34,23 +34,36 @@
           <template #default="props">
             <div class="space-y-2">
               <div v-for="item in props.row.ops">
-                <el-progress
+                <div
+                  class="flex items-center space-x-1"
                   v-if="props.row.phase === Phase.StepN"
-                  :text-inside="true"
-                  :stroke-width="22"
-                  :percentage="item.percent"
-                  :status="item.color"
                 >
-                  <p class="flex justify-between space-x-2 pr-3">
-                    <span class="space-x-2">
-                      <span>{{ item.k }}</span>
-                      <span>{{ item.v }}</span>
-                    </span>
-                    <el-text v-if="isPositive(item.opsVoteTotal)">{{
-                      item.opsVoteTotal
-                    }}</el-text>
-                  </p>
-                </el-progress>
+                  <el-progress
+                    class="flex-1"
+                    :text-inside="true"
+                    :stroke-width="22"
+                    :percentage="item.percent"
+                  >
+                    <div
+                      :class="
+                        classNames(
+                          'flex justify-between w-full h-full',
+                          item.color
+                        )
+                      "
+                    >
+                      <p class="flex justify-between space-x-2 h-full">
+                        <span class="space-x-2">
+                          <span>{{ item.k }}</span>
+                          <span>{{ item.v }}</span>
+                        </span>
+                      </p>
+                    </div>
+                  </el-progress>
+                  <el-text v-if="isPositive(item.opsVoteTotal)">{{
+                    item.opsVoteTotal
+                  }}</el-text>
+                </div>
                 <p class="flex space-x-2" v-else>
                   <span>{{ item.k }}</span>
                   <span>{{ item.v }}</span>
@@ -73,25 +86,20 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column label="积分消耗" width="120" align="right" sortable>
-          <template #default="props">
-            <el-text
-              class="font-semibold"
-              type="warning"
-              v-if="isGreaterThanOrEqual(props.row.spendPoint, 1)"
-              >{{ props.row.spendPoint }}</el-text
-            >
-            <el-text v-else>{{ props.row.spendPoint }}</el-text>
-          </template>
-        </el-table-column>
-        <el-table-column label="投票人数" width="120" align="right" sortable>
-          <template #default="props">
-            <el-text type="warning" v-if="props.row.phase === Phase.StepOne">{{
-              props.row.voters
-            }}</el-text>
-            <el-text v-else>{{ props.row.voters }}</el-text>
-          </template>
-        </el-table-column>
+        <el-table-column
+          prop="spendPoint"
+          label="积分消耗"
+          width="120"
+          align="right"
+          sortable
+        />
+        <el-table-column
+          prop="voters"
+          label="投票人数"
+          width="120"
+          align="right"
+          sortable
+        />
         <el-table-column
           prop="votes"
           label="总票数"
@@ -120,7 +128,7 @@
             >
           </template>
         </el-table-column> -->
-        <el-table-column label="创建时间" width="200" align="right">
+        <!-- <el-table-column label="创建时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
@@ -128,6 +136,11 @@
         <el-table-column label="结束时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.finishTime) }}</p>
+          </template>
+        </el-table-column> -->
+        <el-table-column label="周期" width="120" align="right">
+          <template #default="props">
+            <p>{{ props.row.duration }}</p>
           </template>
         </el-table-column>
         <el-table-column label="倒计时" width="120" align="right">
@@ -145,12 +158,14 @@
 </template>
 
 <script setup lang="ts">
+import classNames from "classnames";
 import { IListItem } from "../hooks/useGetList";
 import Countdown from "vue3-countdown";
 import {
   formatMoment,
   isPositive,
   isGreaterThanOrEqual,
+  formatNumber,
 } from "../utils";
 import { computed, reactive, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
@@ -184,6 +199,13 @@ watch(
 .el-progress {
   .el-progress-bar__innerText {
     width: 100%;
+    color: var(--el-table-text-color);
+    margin: 0;
+    height: 100%;
+    line-height: 22px;
   }
+  // .el-progress-bar__inner {
+  //   opacity: 0.4;
+  // }
 }
 </style>

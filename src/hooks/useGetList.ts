@@ -2,8 +2,8 @@ import { onMounted, ref, watchEffect } from "vue";
 import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
 import { isEqual, maxBy, minBy, sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
-import { div, isLessThanOrEqualTo, multipliedBy } from "../utils";
-import { Color, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
+import { div, formatDuration, isLessThanOrEqualTo, multipliedBy } from "../utils";
+import { VoteColor, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
 
 interface IOps {
   k: string;
@@ -13,7 +13,7 @@ interface IOps {
   opsVoteTotalFinal: string | null;
   voteTrend: Object;
   percent: string;
-  color: Color
+  color: VoteColor
 }
 
 interface IAccount {
@@ -94,6 +94,7 @@ export interface IListItem {
   isNftInvest: boolean;
   qID: string;
   qStatus: 1;
+  duration: string;
 }
 
 export function useGetList() {
@@ -120,12 +121,12 @@ function formatRecords(data: ListData<any>) {
       const minOption = minBy(item.ops, 'opsVoteTotal');
       const maxOption = maxBy(item.ops, 'opsVoteTotal');
       ops = item.ops.map((option: IOps) => {
-        let color = Color.Warning;
+        let color = VoteColor.Warning;
         if (isEqual(minOption, option)) {
-          color = Color.Exception;
+          color = VoteColor.Exception;
         }
         if (isEqual(maxOption, option)) {
-          color = Color.Success;
+          color = VoteColor.Success;
         }
         return {
           ...option,
@@ -134,10 +135,13 @@ function formatRecords(data: ListData<any>) {
         };
       });
     }
+    debugger
+    const duration = formatDuration(item.createTime, item.finishTime);
     return {
       ...item,
       phase,
       ops,
+      duration
     };
   });
   return sortBy(_records, (item) => item.endCountdown);

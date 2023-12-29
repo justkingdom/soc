@@ -20,3 +20,10 @@ export enum Color {
   Warning = "warning",
   Exception = "exception",
 }
+
+export enum VoteColor {
+  Default = "",
+  Success = "bg-green-200",
+  Warning = "bg-orange-200",
+  Exception = "bg-red-200",
+}
