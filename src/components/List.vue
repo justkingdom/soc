@@ -120,16 +120,16 @@
             >
           </template>
         </el-table-column> -->
-        <!-- <el-table-column label="创建时间" width="200" align="right">
+        <el-table-column label="创建时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column> -->
-        <!-- <el-table-column label="结束时间" width="200" align="right">
+        </el-table-column>
+        <el-table-column label="结束时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.finishTime) }}</p>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column label="倒计时" width="120" align="right">
           <template #default="props">
             <p v-if="isPositive(props.row.endCountdown)">
