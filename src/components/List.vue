@@ -57,12 +57,20 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="spendPoint"
           label="积分消耗"
           width="120"
           align="right"
           sortable
-        />
+        >
+          <template #default="props">
+            <el-text
+              type="warning"
+              v-if="isGreaterThanOrEqual(props.row.spendPoint, 1)"
+              >{{ props.row.spendPoint }}</el-text
+            >
+            <el-text v-else>{{ props.row.spendPoint }}</el-text>
+          </template>
+        </el-table-column>
         <el-table-column label="投票人数" width="120" align="right" sortable>
           <template #default="props">
             <el-text
@@ -117,7 +125,6 @@
               <countdown :time="props.row.endCountdown" />
             </p>
             <p v-else>已结束</p>
-            <span>{{ props.row.endCountdown }}</span>
           </template>
         </el-table-column>
       </el-table>
