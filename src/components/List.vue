@@ -63,13 +63,16 @@
           align="right"
           sortable
         />
-        <el-table-column
-          prop="voters"
-          label="投票人数"
-          width="120"
-          align="right"
-          sortable
-        />
+        <el-table-column label="投票人数" width="120" align="right" sortable>
+          <template #default="props">
+            <el-text
+              type="warning"
+              v-if="isGreaterThanOrEqual(props.row.voters, 20)"
+              >{{ props.row.voters }}</el-text
+            >
+            <el-text v-else>{{ props.row.voters }}</el-text>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="votes"
           label="总票数"
@@ -114,6 +117,7 @@
               <countdown :time="props.row.endCountdown" />
             </p>
             <p v-else>已结束</p>
+            <span>{{ props.row.endCountdown }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -125,11 +129,17 @@
 <script setup lang="ts">
 import { IListItem } from "../hooks/useGetList";
 import Countdown from "vue3-countdown";
-import { formatMoment, isPositive, isLessThan } from "../utils";
-import { computed } from "vue";
+import {
+  formatMoment,
+  isPositive,
+  isLessThan,
+  isGreaterThanOrEqual,
+} from "../utils";
+import { computed, reactive, watch } from "vue";
 import { HEIGHT_CONTAINER } from "../constants";
+import {} from "@vueuse/core";
 
-defineProps<{
+const props = defineProps<{
   datas: Array<IListItem> | null;
   isLoading: boolean;
   total: number;
@@ -138,4 +148,17 @@ defineProps<{
 const height = computed(() => {
   return window.innerHeight - HEIGHT_CONTAINER;
 });
+
+const reactiveObject = reactive({ count: 0 });
+
+const forceUpdate = () => {
+  reactiveObject.count = Math.random();
+};
+
+watch(
+  () => props.datas,
+  () => {
+    forceUpdate();
+  }
+);
 </script>

@@ -121,6 +121,7 @@ export function useGetListHot() {
     });
     const _records = data.records.map((item) => {
       if (isLessThanOrEqualTo(item.endCountdown, 0)) {
+        console.log(222);
         fetchData();
       }
       return {
@@ -139,7 +140,7 @@ export function useGetListHot() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 30000);
+  }, 10000);
 
   return {
     isLoading,
