@@ -8,15 +8,20 @@
     active-text-color="#ffd04b"
   >
     <router-link to="/"
-      ><el-menu-item index="1" class="text-lg font-bold"
+      ><el-menu-item index="/" class="text-lg font-bold"
+        >首页</el-menu-item
+      ></router-link
+    >
+    <router-link to="/hot"
+      ><el-menu-item index="/hot" class="text-lg font-bold"
         >热门</el-menu-item
       ></router-link
     >
     <router-link to="/trend">
-      <el-menu-item index="2" class="text-lg">趋势</el-menu-item>
+      <el-menu-item index="/trend" class="text-lg">趋势</el-menu-item>
     </router-link>
     <router-link to="/rank">
-      <el-menu-item index="3" class="text-lg">排行</el-menu-item>
+      <el-menu-item index="/rank" class="text-lg">排行</el-menu-item>
     </router-link>
   </el-menu>
   <article class="p-4">
@@ -25,7 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
 
-const activeIndex = ref("1");
+const activeIndex = computed(() => {
+  return window.location.pathname;
+});
 </script>

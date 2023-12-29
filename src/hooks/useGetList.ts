@@ -37,7 +37,7 @@ interface IAccount {
   updateTime: string | null;
 }
 
-interface ListItem {
+export interface IListItem {
   title: string;
   account: IAccount;
   ops: Array<IOps>;
@@ -107,7 +107,7 @@ export function useGetList() {
 }
 
 export function useGetListHot() {
-  const list = ref(null as Array<ListItem> | null);
+  const list = ref(null as Array<IListItem> | null);
   const isLoading = ref(true);
   const total = ref(0);
 
@@ -146,8 +146,47 @@ export function useGetListHot() {
   };
 }
 
+export function useGetListHome() {
+  const list = ref(null as Array<IListItem> | null);
+  const isLoading = ref(true);
+  const total = ref(0);
+
+  const fetchData = async () => {
+    const { data } = await fetchListHot({
+      mark: 0,
+      pageSize: 20,
+      qStatusList: 1,
+      version: 0,
+      sortBySpendPoint: 0,
+    });
+    const _records = data.records.map((item) => {
+      return {
+        ...item,
+      }
+    });
+    list.value = sortBy(_records, item => item.endCountdown);
+    total.value = _records.length;
+  }
+
+  onMounted(async () => {
+    isLoading.value = true;
+    await fetchData();
+    isLoading.value = false;
+  });
+
+  useIntervalFn(() => {
+    fetchData();
+  }, 3000);
+
+  return {
+    isLoading,
+    list,
+    total
+  };
+}
+
 export function useGetListNotLogin() {
-  const list = ref(null as Array<ListItem> | null);
+  const list = ref(null as Array<IListItem> | null);
   const isLoading = ref(true);
   const total = ref(0);
 

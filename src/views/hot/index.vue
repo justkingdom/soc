@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { useGetListNotLogin } from "../../hooks/useGetList";
+import { useGetListHot } from "../../hooks/useGetList";
 import List from "../../components/List.vue";
 
-const { isLoading, list, total } = useGetListNotLogin();
+const { isLoading, list, total } = useGetListHot();
 </script>

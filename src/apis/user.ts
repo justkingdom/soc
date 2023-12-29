@@ -8,3 +8,10 @@ export async function fetchUserInfo() {
     method: "get",
   });
 }
+
+export async function fetchMock() {
+  return http.request<BaseResponse<any>>({
+    url: `https://api.allinnode.com/account/wallet/chain/list`,
+    method: "get",
+  });
+}

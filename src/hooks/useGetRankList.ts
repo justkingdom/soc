@@ -10,9 +10,9 @@ interface IRankItem {
   nickname: string;
   photo: string;
   badge: null;
-  status: 1;
-  totalIncome: 1865.65626923;
-  order: 1;
+  status: number;
+  totalIncome: number;
+  order: number;
   percent: string;
   airdrop: string;
 }
