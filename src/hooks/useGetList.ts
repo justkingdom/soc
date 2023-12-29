@@ -135,7 +135,6 @@ function formatRecords(data: ListData<any>) {
         };
       });
     }
-    debugger
     const duration = formatDuration(item.createTime, item.finishTime);
     return {
       ...item,

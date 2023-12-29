@@ -161,12 +161,7 @@
 import classNames from "classnames";
 import { IListItem } from "../hooks/useGetList";
 import Countdown from "vue3-countdown";
-import {
-  formatMoment,
-  isPositive,
-  isGreaterThanOrEqual,
-  formatNumber,
-} from "../utils";
+import { isPositive } from "../utils";
 import { computed, reactive, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import {} from "@vueuse/core";
@@ -204,8 +199,5 @@ watch(
     height: 100%;
     line-height: 22px;
   }
-  // .el-progress-bar__inner {
-  //   opacity: 0.4;
-  // }
 }
 </style>
