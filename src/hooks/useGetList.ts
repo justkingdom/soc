@@ -2,6 +2,7 @@ import { onMounted, ref, watchEffect } from "vue";
 import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
 import { sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
+import { isLessThanOrEqualTo } from "../utils";
 
 interface IOps {
   k: string;
@@ -99,7 +100,6 @@ export function useGetList() {
       page: 1,
       pageSize: 100,
     });
-    // console.log("data: ", data);
     list.value = data;
   });
 
@@ -119,8 +119,10 @@ export function useGetListHot() {
       version: 0,
       sortBySpendPoint: 0,
     });
-    // console.log("data: ", data);
     const _records = data.records.map((item) => {
+      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
+        fetchData();
+      }
       return {
         ...item,
       }
@@ -160,6 +162,9 @@ export function useGetListHome() {
       sortBySpendPoint: 0,
     });
     const _records = data.records.map((item) => {
+      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
+        fetchData();
+      }
       return {
         ...item,
       }
@@ -196,6 +201,9 @@ export function useGetListNotLogin() {
       pageSize: 20,
     });
     const _records = data.records.map((item) => {
+      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
+        fetchData();
+      }
       return {
         ...item,
       }
@@ -212,7 +220,7 @@ export function useGetListNotLogin() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 30000);
+  }, 3000);
 
   return {
     isLoading,

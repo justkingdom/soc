@@ -108,14 +108,12 @@
             <p>{{ formatMoment(props.row.finishTime) }}</p>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="endCountdown"
-          label="倒计时"
-          width="120"
-          align="right"
-        >
+        <el-table-column label="倒计时" width="120" align="right">
           <template #default="props">
-            <p><countdown :time="props.row.endCountdown" /></p>
+            <p v-if="isPositive(props.row.endCountdown)">
+              <countdown :time="props.row.endCountdown" />
+            </p>
+            <p v-else>已结束</p>
           </template>
         </el-table-column>
       </el-table>
