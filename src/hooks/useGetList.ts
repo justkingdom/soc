@@ -1,8 +1,9 @@
 import { onMounted, ref, watchEffect } from "vue";
 import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
-import { sortBy } from "lodash";
+import { isEqual, maxBy, minBy, sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
-import { isLessThanOrEqualTo } from "../utils";
+import { div, isGreaterThanOrEqual, isLessThanOrEqualTo, multipliedBy } from "../utils";
+import { Color, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
 
 interface IOps {
   k: string;
@@ -11,6 +12,8 @@ interface IOps {
   opsVoteTotalSnapshot: string | null;
   opsVoteTotalFinal: string | null;
   voteTrend: Object;
+  percent: string;
+  color: Color
 }
 
 interface IAccount {
@@ -39,6 +42,7 @@ interface IAccount {
 }
 
 export interface IListItem {
+  phase: Phase;
   title: string;
   account: IAccount;
   ops: Array<IOps>;
@@ -106,6 +110,39 @@ export function useGetList() {
   return list;
 }
 
+function formatRecords(data: ListData<any>) {
+  const _records = data.records.map((item) => {
+    const phase = isLessThanOrEqualTo(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
+      ? Phase.StepOne
+      : Phase.StepN;
+    let ops = item.ops;
+    if (phase === Phase.StepN) {
+      const minOption = minBy(item.ops, 'opsVoteTotal');
+      const maxOption = maxBy(item.ops, 'opsVoteTotal');
+      ops = item.ops.map((option: IOps) => {
+        let color = Color.Warning;
+        if (isEqual(minOption, option)) {
+          color = Color.Exception;
+        }
+        if (isEqual(maxOption, option)) {
+          color = Color.Success;
+        }
+        return {
+          ...option,
+          percent: +multipliedBy(div(option.opsVoteTotal, item.votes), 100),
+          color
+        };
+      });
+    }
+    return {
+      ...item,
+      phase,
+      ops,
+    };
+  });
+  return sortBy(_records, (item) => item.endCountdown);
+}
+
 export function useGetListHot() {
   const list = ref(null as Array<IListItem> | null);
   const isLoading = ref(true);
@@ -119,18 +156,10 @@ export function useGetListHot() {
       version: 0,
       sortBySpendPoint: 0,
     });
-    const _records = data.records.map((item) => {
-      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
-        console.log(222);
-        fetchData();
-      }
-      return {
-        ...item,
-      }
-    });
-    list.value = sortBy(_records, item => item.endCountdown);
-    total.value = _records.length;
-  }
+    const _list = formatRecords(data);
+    list.value = _list;
+    total.value = _list.length;
+  };
 
   onMounted(async () => {
     isLoading.value = true;
@@ -145,49 +174,7 @@ export function useGetListHot() {
   return {
     isLoading,
     list,
-    total
-  };
-}
-
-export function useGetListHome() {
-  const list = ref(null as Array<IListItem> | null);
-  const isLoading = ref(true);
-  const total = ref(0);
-
-  const fetchData = async () => {
-    const { data } = await fetchListHot({
-      mark: 0,
-      pageSize: 20,
-      qStatusList: 1,
-      version: 0,
-      sortBySpendPoint: 0,
-    });
-    const _records = data.records.map((item) => {
-      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
-        fetchData();
-      }
-      return {
-        ...item,
-      }
-    });
-    list.value = sortBy(_records, item => item.endCountdown);
-    total.value = _records.length;
-  }
-
-  onMounted(async () => {
-    isLoading.value = true;
-    await fetchData();
-    isLoading.value = false;
-  });
-
-  useIntervalFn(() => {
-    fetchData();
-  }, 3000);
-
-  return {
-    isLoading,
-    list,
-    total
+    total,
   };
 }
 
@@ -201,17 +188,10 @@ export function useGetListNotLogin() {
       page: 1,
       pageSize: 20,
     });
-    const _records = data.records.map((item) => {
-      if (isLessThanOrEqualTo(item.endCountdown, 0)) {
-        fetchData();
-      }
-      return {
-        ...item,
-      }
-    });
-    list.value = sortBy(_records, item => item.endCountdown);
-    total.value = _records.length;
-  }
+    const _list = formatRecords(data);
+    list.value = _list;
+    total.value = _list.length;
+  };
 
   onMounted(async () => {
     isLoading.value = true;
@@ -226,6 +206,6 @@ export function useGetListNotLogin() {
   return {
     isLoading,
     list,
-    total
+    total,
   };
 }
