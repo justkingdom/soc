@@ -57,6 +57,9 @@
                           <span>{{ item.k }}</span>
                           <span>{{ item.v }}</span>
                         </span>
+                        <el-text class="font-semibold">{{
+                          toPercent(item.percent, 2, false)
+                        }}</el-text>
                       </p>
                     </div>
                   </el-progress>
@@ -161,7 +164,7 @@
 import classNames from "classnames";
 import { IListItem } from "../hooks/useGetList";
 import Countdown from "vue3-countdown";
-import { isPositive } from "../utils";
+import { isPositive, toPercent } from "../utils";
 import { computed, reactive, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import {} from "@vueuse/core";
