@@ -151,7 +151,8 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
 
   // 进行中的问题中，已投入
   const doingCostPoints = ref("");
-  const doingMyCostPoints = ref("");
+  // 进行中的问题中，已投入
+  // const doingMyCostPoints = ref("");
 
   // 结束的问题中，正确的数量
   const finishedTotalCorrect = ref(0);
@@ -188,13 +189,6 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
         return isPositive(item.endCountdown);
       });
       doingCostPoints.value = list.value.reduce(
-        (pre, cur) => plus(pre, cur.spendPoint),
-        "0"
-      );
-      const _myDoingList = list.value.filter((item: IListItem) => {
-        return item.opsKey !== "";
-      });
-      doingMyCostPoints.value = _myDoingList.reduce(
         (pre, cur) => plus(pre, cur.spendPoint),
         "0"
       );
