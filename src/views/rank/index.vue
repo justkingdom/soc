@@ -71,18 +71,13 @@
 <script setup lang="ts">
 import { useGetRankList } from "../../hooks/useGetRankList";
 import { toPercent, formatNumber } from "../../utils";
-import { HEIGHT_CONTAINER } from "../../constants";
-import { computed, ref } from "vue";
 import { IAccount } from "../../apis/list";
+import { ref } from "vue";
 
 const visibleAccount = ref(false);
 const currentAccount = ref(null as IAccount | null);
 
 const { isLoading, list, total } = useGetRankList();
-
-const height = computed(() => {
-  return window.innerHeight - HEIGHT_CONTAINER;
-});
 
 function onHideAccount() {
   currentAccount.value = null;

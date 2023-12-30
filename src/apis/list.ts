@@ -8,7 +8,7 @@ export interface IOps {
   opsVoteTotalSnapshot: string | null;
   opsVoteTotalFinal: string | null;
   voteTrend: Object;
-  percent: string;
+  percent: string | number;
   color: VoteColor;
 }
 
