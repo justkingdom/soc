@@ -27,3 +27,9 @@ export enum VoteColor {
   Warning = "bg-orange-200",
   Exception = "bg-red-200",
 }
+
+export enum QuestionStatus {
+  Doing = 'Doing',
+  Finished = 'Finished'
+}
+

@@ -9,21 +9,28 @@
           </el-descriptions-item>
         </el-descriptions>
       </aside>
-      <el-table stripe :data="list" style="width: 100%" :height="height">
+      <el-table stripe :data="list">
         <el-table-column label="序号" prop="order" width="120" />
         <el-table-column label="账户" width="400">
           <template #default="props">
             <div class="flex items-center space-x-2">
-              <a
-                class="flex items-center space-x-2"
-                :href="`https://app.socrates.com/profile?account=${props.row.account}`"
-                target="_blank"
-              >
-                <el-avatar shape="square" :size="32" :src="props.row.photo" />
-                <span>
-                  {{ props.row.nickname }}
-                </span>
-              </a>
+              <el-avatar shape="square" :size="32" :src="props.row.photo" />
+              <div>
+                <a
+                  class="flex items-center space-x-2"
+                  :href="`https://app.socrates.com/profile?account=${props.row.account}`"
+                  target="_blank"
+                >
+                  <span>
+                    {{ props.row.nickname }}
+                  </span>
+                </a>
+                <el-text
+                  class="underline cursor-pointer text-gray-500"
+                  :onClick="() => onShowAccount(props.row)"
+                  >账户详情</el-text
+                >
+              </div>
             </div>
           </template>
         </el-table-column>
@@ -57,17 +64,33 @@
       </el-table>
     </div>
   </article>
+  <account :account="currentAccount" :on-close="onHideAccount" />
+  <el-backtop :right="100" :bottom="100" />
 </template>
 
 <script setup lang="ts">
 import { useGetRankList } from "../../hooks/useGetRankList";
 import { toPercent, formatNumber } from "../../utils";
 import { HEIGHT_CONTAINER } from "../../constants";
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import { IAccount } from "../../apis/list";
+
+const visibleAccount = ref(false);
+const currentAccount = ref(null as IAccount | null);
 
 const { isLoading, list, total } = useGetRankList();
 
 const height = computed(() => {
   return window.innerHeight - HEIGHT_CONTAINER;
 });
+
+function onHideAccount() {
+  currentAccount.value = null;
+  visibleAccount.value = false;
+}
+
+function onShowAccount(account: IAccount) {
+  currentAccount.value = account;
+  visibleAccount.value = true;
+}
 </script>

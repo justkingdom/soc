@@ -12,6 +12,12 @@ type PageHotParams = {
   sortBySpendPoint: number;
 };
 
+type PageAccountParams = {
+  mark: number;
+  pageSize: number;
+  account: string;
+};
+
 // 正常响应
 type BaseResponse<T> = {
   code: number;

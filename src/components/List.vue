@@ -78,7 +78,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="作者" width="120">
+        <el-table-column label="作者" width="160">
           <template #default="props">
             <a
               v-if="props.row.auth === 'all'"
@@ -87,6 +87,11 @@
             >
               {{ props.row.account.nickname }}
             </a>
+            <el-text
+              class="underline cursor-pointer text-gray-500"
+              :onClick="() => onShowAccount(props.row.account)"
+              >账户详情</el-text
+            >
           </template>
         </el-table-column>
         <el-table-column
@@ -158,16 +163,17 @@
     </div>
   </article>
   <el-backtop :right="100" :bottom="100" />
+  <account :account="currentAccount" :on-close="onHideAccount" />
 </template>
 
 <script setup lang="ts">
 import classNames from "classnames";
-import { IListItem } from "../hooks/useGetList";
 import Countdown from "vue3-countdown";
 import { isPositive, toPercent } from "../utils";
-import { computed, reactive, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
-import {} from "@vueuse/core";
+import Account from "./Account.vue";
+import { IListItem, IAccount } from "../apis/list";
 
 const props = defineProps<{
   datas: Array<IListItem> | null;
@@ -179,6 +185,8 @@ const height = computed(() => {
   return window.innerHeight - HEIGHT_CONTAINER;
 });
 
+const visibleAccount = ref(false);
+const currentAccount = ref(null as IAccount | null);
 const reactiveObject = reactive({ count: 0 });
 
 const forceUpdate = () => {
@@ -191,6 +199,16 @@ watch(
     forceUpdate();
   }
 );
+
+function onHideAccount() {
+  currentAccount.value = null;
+  visibleAccount.value = false;
+}
+
+function onShowAccount(account: IAccount) {
+  currentAccount.value = account;
+  visibleAccount.value = true;
+}
 </script>
 
 <style lang="scss">

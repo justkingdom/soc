@@ -1,104 +1,29 @@
-import { onMounted, ref, watchEffect } from "vue";
-import { fetchListHomeB, fetchListHot, fetchListNotLogin } from "../apis/list";
+import { Ref, onMounted, ref, watchEffect } from "vue";
+import {
+  IAccount,
+  IListItem,
+  IOps,
+  fetchListAccount,
+  fetchListHomeB,
+  fetchListHot,
+  fetchListNotLogin,
+} from "../apis/list";
 import { isEqual, maxBy, minBy, sortBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
-import { div, formatDuration, isLessThanOrEqualTo, multipliedBy } from "../utils";
+import {
+  div,
+  formatDuration,
+  isLessThanOrEqualTo,
+  isPositive,
+  isZero,
+  minus,
+  multipliedBy,
+  plus,
+} from "../utils";
 import { VoteColor, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
 
-interface IOps {
-  k: string;
-  v: string;
-  opsVoteTotal: number;
-  opsVoteTotalSnapshot: string | null;
-  opsVoteTotalFinal: string | null;
-  voteTrend: Object;
-  percent: string;
-  color: VoteColor
-}
-
-interface IAccount {
-  _id: string;
-  account: string;
-  nickname: string;
-  profile: string;
-  // badge: {
-  //   "10": {
-  //     level: 4;
-  //     createTime: 1696882455883;
-  //     updateTime: 1702820724383;
-  //   };
-  //   "20": {
-  //     level: 5;
-  //     createTime: 1695489172449;
-  //     updateTime: 1696782213096;
-  //   };
-  // };
-  photo: string;
-  hasFollow: boolean | null;
-  followStatus: number;
-  status: number;
-  createTime: string | null;
-  updateTime: string | null;
-}
-
-export interface IListItem {
-  phase: Phase;
-  title: string;
-  account: IAccount;
-  ops: Array<IOps>;
-  tags: any;
-  validity: number;
-  imageUrl: Array<string>;
-  voters: number;
-  votes: number;
-  investedTotal: number;
-  investedPoints: number;
-  investNftPoint: number;
-  investedTotalPoints: number;
-  questionPrizePool: number;
-  injectPoint: number;
-  createTime: number;
-  finishTime: number;
-  s: number;
-  prizeStatus: number;
-  auth: number;
-  publicSort: number;
-  privateRank: number;
-  reasonTotal: number;
-  answerLikedTotal: null;
-  inviteUsers: Array<any>;
-  privateRankScore: number;
-  firstQuestionScore: number;
-  rankRate: number;
-  privateRankBetween: number;
-  lastQuestionRankBetween: number;
-  isPrivateRank: boolean;
-  answerUpdateCount: number;
-  allowAnswerTotal: number;
-  allowLikeTotal: number;
-  likeLeaveCount: number;
-  toPublicTime: null;
-  endCountdown: number;
-  showDistribution: number;
-  votesMap: Object;
-  voteChart: null;
-  spendPoint: number;
-  isShowPrexOrEnd: boolean;
-  redPacket: string | null;
-  userInvestedTotalPoints: number;
-  userInvestedPoints: number;
-  userInvestNftPoint: number;
-  opsKey: string;
-  hasAnswerAuth: boolean | null;
-  isPointInvest: boolean;
-  isNftInvest: boolean;
-  qID: string;
-  qStatus: 1;
-  duration: string;
-}
-
 export function useGetList() {
-  const list = ref(null as ListData<any> | null);
+  const list = ref(null as ListData<IListItem> | null);
 
   watchEffect(async () => {
     const { data } = await fetchListHomeB({
@@ -111,15 +36,15 @@ export function useGetList() {
   return list;
 }
 
-function formatRecords(data: ListData<any>) {
+function formatRecords(data: ListData<IListItem>) {
   const _records = data.records.map((item) => {
     const phase = isLessThanOrEqualTo(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
       ? Phase.StepOne
       : Phase.StepN;
     let ops = item.ops;
     if (phase === Phase.StepN) {
-      const minOption = minBy(item.ops, 'opsVoteTotal');
-      const maxOption = maxBy(item.ops, 'opsVoteTotal');
+      const minOption = minBy(item.ops, "opsVoteTotal");
+      const maxOption = maxBy(item.ops, "opsVoteTotal");
       ops = item.ops.map((option: IOps) => {
         let color = VoteColor.Warning;
         if (isEqual(minOption, option)) {
@@ -131,7 +56,7 @@ function formatRecords(data: ListData<any>) {
         return {
           ...option,
           percent: +multipliedBy(div(option.opsVoteTotal, item.votes), 100),
-          color
+          color,
         };
       });
     }
@@ -140,7 +65,7 @@ function formatRecords(data: ListData<any>) {
       ...item,
       phase,
       ops,
-      duration
+      duration,
     };
   });
   return sortBy(_records, (item) => item.endCountdown);
@@ -162,6 +87,7 @@ export function useGetListHot() {
     const _list = formatRecords(data);
     list.value = _list;
     total.value = _list.length;
+    isLoading.value = false;
   };
 
   onMounted(async () => {
@@ -194,6 +120,7 @@ export function useGetListNotLogin() {
     const _list = formatRecords(data);
     list.value = _list;
     total.value = _list.length;
+    isLoading.value = false;
   };
 
   onMounted(async () => {
@@ -210,5 +137,123 @@ export function useGetListNotLogin() {
     isLoading,
     list,
     total,
+  };
+}
+
+export function useGetListByAccount(account: Ref<IAccount | null>) {
+  const list = ref(null as Array<IListItem> | null);
+  const finishedList = ref(null as Array<IListItem> | null);
+  const isLoading = ref(true);
+  const total = ref(0);
+
+  // 进行中的问题中，已投入
+  const doingCostPoints = ref("");
+
+  // 结束的问题中，正确的数量
+  const finishedTotalCorrect = ref(0);
+  // 结束的问题中，错误的数量
+  const finishedTotalError = ref(0);
+  // 结束的问题中，正确率
+  const finishedCorrectRate = ref("");
+
+  // 结束的问题中，积分收益率
+  const finishedIncomeRate = ref("");
+
+  // 结束的问题中，总投入积分
+  const finishedTotalCostPoints = ref("");
+  // 结束的问题中，正确的投入积分
+  const finishedCorrectCostPoints = ref("");
+  // 结束的问题中，错误的投入积分
+  const finishedErrorCostPoints = ref("");
+  // 结束的问题中，正确的收益
+  const finishedTotalCorrectIncome = ref("");
+
+  const fetchData = async () => {
+    if (account && account.value) {
+      isLoading.value = true;
+      const { data } = await fetchListAccount({
+        mark: 0,
+        pageSize: 1000,
+        account: account.value.account,
+      });
+      isLoading.value = false;
+      const _list = formatRecords(data);
+
+      list.value = _list.filter((item: IListItem) => {
+        return isPositive(item.endCountdown);
+      });
+      doingCostPoints.value = list.value.reduce(
+        (pre, cur) => plus(pre, cur.spendPoint),
+        "0"
+      );
+
+      finishedList.value = _list.filter((item: IListItem) => {
+        return !isPositive(item.endCountdown);
+      });
+      // 总投入
+      finishedTotalCostPoints.value = finishedList.value.reduce(
+        (pre, cur) => plus(pre, cur.spendPoint),
+        "0"
+      );
+      const _correctList = _list.filter((item: IListItem) => {
+        return isPositive(item.personIncome?.incomeRate);
+      });
+      finishedTotalCorrect.value = _correctList.length;
+      finishedCorrectCostPoints.value = _correctList.reduce(
+        (pre, cur) => plus(pre, cur.spendPoint),
+        "0"
+      );
+      const _finishedTotalCorrectIncome = _correctList.reduce(
+        (pre, cur) =>
+          plus(pre, cur.personIncome ? cur.personIncome.incomeRate : "0"),
+        "0"
+      );
+      finishedTotalCorrectIncome.value = minus(
+        _finishedTotalCorrectIncome,
+        finishedCorrectCostPoints.value
+      );
+      const _errorList = finishedList.value.filter((item: IListItem) => {
+        return isZero(item.personIncome?.incomeRate);
+      });
+      finishedTotalError.value = _errorList.length;
+      finishedErrorCostPoints.value = _errorList.reduce(
+        (pre, cur) => plus(pre, cur.spendPoint),
+        "0"
+      );
+      total.value = _list.length;
+      finishedCorrectRate.value = div(
+        _correctList.length,
+        finishedList.value.length
+      );
+      finishedIncomeRate.value = div(
+        finishedTotalCorrectIncome.value,
+        finishedTotalCostPoints.value
+      );
+    }
+  };
+
+  watchEffect(async () => {
+    if (account.value) {
+      isLoading.value = true;
+      await fetchData();
+      isLoading.value = false;
+    }
+  });
+
+  return {
+    isLoading,
+    list,
+    finishedList,
+    doingCostPoints,
+    finishedTotalCorrect,
+    finishedTotalError,
+    finishedCorrectRate,
+    finishedIncomeRate,
+    finishedTotalCostPoints,
+    finishedTotalCorrectIncome,
+    finishedErrorCostPoints,
+    finishedCorrectCostPoints,
+    total,
+    refetch: fetchData,
   };
 }
