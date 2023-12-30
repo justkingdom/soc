@@ -353,7 +353,6 @@ const {
   list,
   finishedList,
   doingCostPoints,
-  doingMyCostPoints,
   finishedTotalCorrect,
   finishedTotalError,
   finishedCorrectRate,

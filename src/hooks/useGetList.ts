@@ -151,8 +151,6 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
 
   // 进行中的问题中，已投入
   const doingCostPoints = ref("");
-  // 进行中的问题中，已投入
-  // const doingMyCostPoints = ref("");
 
   // 结束的问题中，正确的数量
   const finishedTotalCorrect = ref(0);
@@ -256,7 +254,6 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
     list,
     finishedList,
     doingCostPoints,
-    doingMyCostPoints,
     finishedTotalCorrect,
     finishedTotalError,
     finishedCorrectRate,
