@@ -114,30 +114,26 @@
               <el-table-column
                 prop="spendPoint"
                 label="积分消耗"
-                width="120"
+                width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="voters"
                 label="投票人数"
-                width="120"
+                width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="votes"
                 label="总票数"
                 width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="questionPrizePool"
                 label="奖池"
                 width="100"
                 align="right"
-                sortable
               />
               <el-table-column label="倒计时" width="120" align="right">
                 <template #default="props">
@@ -173,9 +169,7 @@
               <aside class="flex mb-2">
                 <el-descriptions :column="6" size="small" border>
                   <el-descriptions-item label="总投入积分">
-                    <span class="text-lg">{{
-                      finishedTotalCostPoints
-                    }}</span>
+                    <span class="text-lg">{{ finishedTotalCostPoints }}</span>
                   </el-descriptions-item>
                   <el-descriptions-item label="总积分回收">
                     <span class="text-lg">{{ finishedCorrectCostPoints }}</span>
@@ -299,31 +293,32 @@
               <el-table-column
                 prop="spendPoint"
                 label="积分消耗"
-                width="120"
+                width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="voters"
                 label="投票人数"
-                width="120"
+                width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="votes"
                 label="总票数"
                 width="100"
                 align="right"
-                sortable
               />
               <el-table-column
                 prop="questionPrizePool"
                 label="奖池"
                 width="100"
                 align="right"
-                sortable
               />
+              <el-table-column label="结束时间" width="200" align="right">
+                <template #default="props">
+                  <p>{{ formatMoment(props.row.finishTime) }}</p>
+                </template>
+              </el-table-column>
             </el-table>
           </el-tab-pane>
         </el-tabs>
@@ -337,7 +332,7 @@ import { computed, ref, watchEffect } from "vue";
 import Countdown from "vue3-countdown";
 import classNames from "classnames";
 import { useGetListByAccount } from "../hooks/useGetList";
-import { isPositive, toPercent } from "../utils";
+import { isPositive, toPercent, formatMoment } from "../utils";
 import { Phase, QuestionStatus } from "../constants";
 import { IAccount } from "../apis/list";
 
@@ -366,7 +361,7 @@ const {
   finishedTotalCostPoints,
   finishedTotalCorrectIncome,
   finishedErrorCostPoints,
-  finishedCorrectCostPoints
+  finishedCorrectCostPoints,
 } = useGetListByAccount(computedAccount);
 
 watchEffect(() => {

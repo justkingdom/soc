@@ -19,6 +19,7 @@ import {
   minus,
   multipliedBy,
   plus,
+  toDecimalPlaces,
 } from "../utils";
 import { VoteColor, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
 
@@ -38,6 +39,7 @@ export function useGetList() {
 
 function formatRecords(data: ListData<IListItem>) {
   const _records = data.records.map((item) => {
+    const questionPrizePool = +toDecimalPlaces(item.questionPrizePool, 4);
     const phase = isLessThanOrEqualTo(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
       ? Phase.StepOne
       : Phase.StepN;
@@ -66,7 +68,8 @@ function formatRecords(data: ListData<IListItem>) {
       phase,
       ops,
       duration,
-    };
+      questionPrizePool,
+    } as IListItem;
   });
   return sortBy(_records, (item) => item.endCountdown);
 }
@@ -189,16 +192,21 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
         "0"
       );
       const _myDoingList = list.value.filter((item: IListItem) => {
-        return item.opsKey !== '';
+        return item.opsKey !== "";
       });
       doingMyCostPoints.value = _myDoingList.reduce(
         (pre, cur) => plus(pre, cur.spendPoint),
         "0"
       );
 
-      finishedList.value = _list.filter((item: IListItem) => {
+      const _finishedList = _list.filter((item: IListItem) => {
         return !isPositive(item.endCountdown);
       });
+      finishedList.value = sortBy(
+        _finishedList,
+        (item) => +item.finishTime,
+        "desc"
+      ).reverse();
       // 总投入
       finishedTotalCostPoints.value = finishedList.value.reduce(
         (pre, cur) => plus(pre, cur.spendPoint),
