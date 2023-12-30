@@ -16,8 +16,11 @@
           >
             <aside class="flex justify-end mb-2">
               <el-descriptions :column="6" size="small" border>
-                <el-descriptions-item label="总投入积分">
+                <el-descriptions-item label="总问题积分">
                   <span class="text-lg">{{ doingCostPoints }}</span>
+                </el-descriptions-item>
+                <el-descriptions-item label="我的投入积分">
+                  <span class="text-lg">{{ doingMyCostPoints }}</span>
                 </el-descriptions-item>
               </el-descriptions>
             </aside>
@@ -355,6 +358,7 @@ const {
   list,
   finishedList,
   doingCostPoints,
+  doingMyCostPoints,
   finishedTotalCorrect,
   finishedTotalError,
   finishedCorrectRate,
