@@ -12,11 +12,11 @@
         >首页</el-menu-item
       ></router-link
     >
-    <!-- <router-link to="/hot"
+    <router-link to="/hot"
       ><el-menu-item index="/hot" class="text-lg font-bold"
         >热门</el-menu-item
       ></router-link
-    > -->
+    >
     <router-link to="/trend">
       <el-menu-item index="/trend" class="text-lg">趋势</el-menu-item>
     </router-link>

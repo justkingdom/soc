@@ -83,6 +83,7 @@ export default defineConfig({
         target: "https://app.socrates.com",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
+        timeout: 500000
       },
     },
   },

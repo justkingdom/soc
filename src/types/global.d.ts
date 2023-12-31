@@ -32,6 +32,7 @@ type ListData<T> = {
   total: number;
   size: number;
   current: number;
+  mark: number;
 };
 
 

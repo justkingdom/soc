@@ -1,4 +1,5 @@
 import { Ref, onMounted, ref, watchEffect } from "vue";
+import store2 from "store2";
 import {
   IAccount,
   IListItem,
@@ -26,6 +27,8 @@ import {
   DEFAULT_VOTES_ONE_TO_SECOND,
   Phase,
   GLOBAL_INTERVAL_TIME,
+  STORAGE_KEY_HOT_LIST,
+  PAGE_MAX_SIZE,
 } from "../constants";
 import Decimal from "decimal.js";
 
@@ -43,8 +46,8 @@ export function useGetList() {
   return list;
 }
 
-function formatRecords(data: ListData<IListItem>) {
-  const _records = data.records.map((item) => {
+function formatRecords(records: Array<IListItem>, index?: number) {
+  const _records = records.map((item) => {
     const questionPrizePool = +toDecimalPlaces(item.questionPrizePool, 4);
     let totalRewards = "0";
     if (isZero(item.endCountdown) && item.personIncome) {
@@ -96,25 +99,27 @@ function formatRecords(data: ListData<IListItem>) {
       duration,
       questionPrizePool,
       totalRewards,
+      index,
     } as IListItem;
   });
   return sortBy(_records, (item) => item.endCountdown);
 }
 
-export function useGetListHot() {
+export function useGetIndexList(index: Ref<number>) {
   const list = ref(null as Array<IListItem> | null);
   const isLoading = ref(true);
   const total = ref(0);
 
   const fetchData = async () => {
+    console.log("index.value: ", index.value);
     const { data } = await fetchListHot({
-      mark: 0,
-      pageSize: 700,
+      mark: index.value,
+      pageSize: 20,
       qStatusList: 1,
       version: 0,
       sortBySpendPoint: 0,
     });
-    const _list = formatRecords(data);
+    const _list = formatRecords(data.records);
     list.value = _list;
     total.value = _list.length;
     isLoading.value = false;
@@ -134,6 +139,73 @@ export function useGetListHot() {
     isLoading,
     list,
     total,
+    fetchData,
+  };
+}
+
+export function useGetListHot() {
+  const list = ref(null as Array<IListItem> | null);
+  const isLoading = ref(true);
+  const total = ref(0);
+
+  const fetchData = async () => {
+    const requests = [];
+
+    for (let i = 0; i <= PAGE_MAX_SIZE; i++) {
+      const request = fetchListHot({
+        mark: i,
+        pageSize: 20,
+        qStatusList: 1,
+        version: 0,
+        sortBySpendPoint: 0,
+      });
+      requests.push(request);
+    }
+
+    try {
+      console.log("hots begin ...");
+      const reps = await Promise.all(requests);
+      console.log("hots end ...");
+      let results = [] as Array<IListItem>;
+      reps.forEach((rep: BaseResponse<ListData<IListItem>>, index: number) => {
+        const { records } = rep.data;
+        if (records.length > 0) {
+          const _list = formatRecords(records, index);
+          results = results.concat(_list);
+        } else {
+          console.warn("The empty index is ", index);
+        }
+      });
+
+      list.value = sortBy(results, (item) => item.endCountdown);
+      store2.set(STORAGE_KEY_HOT_LIST, list.value);
+      total.value = results.length;
+      isLoading.value = false;
+    } catch (error) {
+      console.error("Error:", error);
+      const results = store2.has(STORAGE_KEY_HOT_LIST)
+        ? store2.get(STORAGE_KEY_HOT_LIST)
+        : [] as Array<IListItem>;
+      list.value = sortBy(results, (item) => item.endCountdown);
+      total.value = results.length;
+      isLoading.value = false;
+    }
+  };
+
+  onMounted(async () => {
+    isLoading.value = true;
+    await fetchData();
+    isLoading.value = false;
+  });
+
+  useIntervalFn(() => {
+    fetchData();
+  }, 30000);
+
+  return {
+    isLoading,
+    list,
+    total,
   };
 }
 
@@ -147,7 +219,7 @@ export function useGetListNotLogin() {
       page: 1,
       pageSize: 20,
     });
-    const _list = formatRecords(data);
+    const _list = formatRecords(data.records);
     list.value = _list;
     total.value = _list.length;
     isLoading.value = false;
@@ -202,11 +274,11 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
     if (account && account.value) {
       const { data } = await fetchListAccount({
         mark: 0,
-        pageSize: 1000,
+        pageSize: 20,
         account: account.value.account,
       });
       isLoading.value = false;
-      const _list = formatRecords(data);
+      const _list = formatRecords(data.records);
 
       // 正在进行中的
       list.value = _list.filter((item: IListItem) => {
@@ -239,8 +311,7 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
         "0"
       );
       const _finishedTotalCorrectIncome = _correctList.reduce(
-        (pre, cur) =>
-          plus(pre, cur.totalRewards || '0'),
+        (pre, cur) => plus(pre, cur.totalRewards || "0"),
         "0"
       );
       finishedTotalCorrectIncome.value = minus(

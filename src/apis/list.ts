@@ -106,6 +106,7 @@ export interface IListItem {
   personIncome?: IPersonIncome;
   duration: string;
   totalRewards?: string;
+  index?: number;
 }
 
 export async function fetchListNotLogin(params: PageParams) {

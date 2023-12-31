@@ -2,18 +2,8 @@
   <article>
     <el-skeleton :rows="20" animated v-if="isLoading" />
     <div class="mx-auto w-fit" v-else>
-      <aside class="flex justify-end">
-        <el-descriptions>
-          <el-descriptions-item label="总数:">
-            <span class="text-lg">{{ total }}</span>
-          </el-descriptions-item>
-          <!-- <el-descriptions-item label="RANDOM:">
-            <span class="text-lg">{{ reactiveObject.count }}</span>
-          </el-descriptions-item> -->
-        </el-descriptions>
-      </aside>
       <el-table stripe :data="datas" :height="height">
-        <el-table-column type="index" width="50" />
+        <!-- <el-table-column type="index" width="50" /> -->
         <el-table-column label="标题" width="400">
           <template #default="props">
             <div>
@@ -31,6 +21,7 @@
             <p class="space-x-1">
               <span>QID:</span>
               <span>{{ props.row.qID }}</span>
+              <span>(Index: {{ props.row.index }})</span>
             </p>
           </template>
         </el-table-column>
@@ -82,7 +73,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="作者" width="160">
+        <el-table-column label="作者" width="120">
           <template #default="props">
             <a
               v-if="props.row.auth === 'all'"
@@ -144,17 +135,17 @@
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column label="结束时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.finishTime) }}</p>
           </template>
-        </el-table-column> -->
-        <el-table-column label="周期" width="120" align="right">
+        </el-table-column> 
+        <!-- <el-table-column label="周期" width="120" align="right">
           <template #default="props">
             <p>{{ props.row.duration }}</p>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="倒计时" width="120" align="right">
           <template #default="props">
             <p v-if="isPositive(props.row.endCountdown)">
@@ -173,7 +164,7 @@
 <script setup lang="ts">
 import classNames from "classnames";
 import Countdown from "vue3-countdown";
-import { isPositive, toPercent } from "../utils";
+import { isPositive, toPercent, formatMoment } from "../utils";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";

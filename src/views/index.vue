@@ -1,10 +1,29 @@
 <template>
+  <div class="flex space-x-2">
+    <el-input-number
+      v-model="page"
+      :min="1"
+      :max="50"
+      controls-position="right"
+      size="large"
+    />
+    <el-button size="large" @click="onSubmit">提交</el-button>
+  </div>
   <List :datas="list" :is-loading="isLoading" :total="total" />
 </template>
 
 <script setup lang="ts">
-import { useGetListHot } from "../hooks/useGetList";
+import { useGetIndexList } from "../hooks/useGetList";
 import List from "../components/List.vue";
+import { ref } from "vue";
 
-const { isLoading, list, total } = useGetListHot();
+const page = ref(0);
+const summittedPage = ref(0);
+
+const { isLoading, list, total, fetchData } = useGetIndexList(summittedPage);
+
+const onSubmit = () => {
+  summittedPage.value = page.value;
+  fetchData();
+};
 </script>
