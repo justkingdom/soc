@@ -17,5 +17,5 @@ const computedPage = computed(() => {
   return 0;
 });
 
-const { isLoading, list, total, fetchData } = useGetIndexList(computedPage);
+const { isLoading, list, total } = useGetIndexList(computedPage);
 </script>
