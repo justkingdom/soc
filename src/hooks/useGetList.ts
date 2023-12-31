@@ -21,7 +21,13 @@ import {
   plus,
   toDecimalPlaces,
 } from "../utils";
-import { VoteColor, DEFAULT_VOTES_ONE_TO_SECOND, Phase } from "../constants";
+import {
+  VoteColor,
+  DEFAULT_VOTES_ONE_TO_SECOND,
+  Phase,
+  GLOBAL_INTERVAL_TIME,
+} from "../constants";
+import Decimal from "decimal.js";
 
 export function useGetList() {
   const list = ref(null as ListData<IListItem> | null);
@@ -40,6 +46,26 @@ export function useGetList() {
 function formatRecords(data: ListData<IListItem>) {
   const _records = data.records.map((item) => {
     const questionPrizePool = +toDecimalPlaces(item.questionPrizePool, 4);
+    let totalRewards = "0";
+    if (isZero(item.endCountdown) && item.personIncome) {
+      const {
+        answerReward,
+        victoryReward,
+        likeReward,
+        investReward,
+        reasonReward,
+        askShareReward,
+        askTrendReward,
+      } = item.personIncome;
+      totalRewards = new Decimal(answerReward)
+        .add(victoryReward)
+        .add(likeReward)
+        .add(investReward)
+        .add(reasonReward)
+        .add(askShareReward)
+        .add(askTrendReward)
+        .toFixed();
+    }
     const phase = isLessThanOrEqualTo(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
       ? Phase.StepOne
       : Phase.StepN;
@@ -69,6 +95,7 @@ function formatRecords(data: ListData<IListItem>) {
       ops,
       duration,
       questionPrizePool,
+      totalRewards,
     } as IListItem;
   });
   return sortBy(_records, (item) => item.endCountdown);
@@ -82,7 +109,7 @@ export function useGetListHot() {
   const fetchData = async () => {
     const { data } = await fetchListHot({
       mark: 0,
-      pageSize: 1000,
+      pageSize: 700,
       qStatusList: 1,
       version: 0,
       sortBySpendPoint: 0,
@@ -101,7 +128,7 @@ export function useGetListHot() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 10000);
+  }, GLOBAL_INTERVAL_TIME);
 
   return {
     isLoading,
@@ -134,7 +161,7 @@ export function useGetListNotLogin() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 3000);
+  }, GLOBAL_INTERVAL_TIME);
 
   return {
     isLoading,
@@ -173,7 +200,6 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
 
   const fetchData = async () => {
     if (account && account.value) {
-      isLoading.value = true;
       const { data } = await fetchListAccount({
         mark: 0,
         pageSize: 1000,
@@ -214,7 +240,7 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
       );
       const _finishedTotalCorrectIncome = _correctList.reduce(
         (pre, cur) =>
-          plus(pre, cur.personIncome ? cur.personIncome.incomeRate : "0"),
+          plus(pre, cur.totalRewards || '0'),
         "0"
       );
       finishedTotalCorrectIncome.value = minus(
@@ -248,6 +274,10 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
       isLoading.value = false;
     }
   });
+
+  useIntervalFn(() => {
+    fetchData();
+  }, GLOBAL_INTERVAL_TIME);
 
   return {
     isLoading,

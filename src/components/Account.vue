@@ -192,7 +192,7 @@
             </article>
 
             <el-table stripe :data="finishedList">
-              <el-table-column label="标题" width="400">
+              <el-table-column label="标题" width="360">
                 <template #default="props">
                   <div>
                     <a
@@ -212,7 +212,7 @@
                   </p>
                 </template>
               </el-table-column>
-              <el-table-column width="480" label="选项">
+              <el-table-column width="440" label="选项">
                 <template #default="props">
                   <div class="space-y-2">
                     <div v-for="item in props.row.ops">
@@ -271,15 +271,25 @@
                 <template #default="props">
                   <el-text
                     :type="
-                      isPositive(props.row.personIncome.incomeRate)
-                        ? 'success'
-                        : 'danger'
+                      isPositive(props.row.totalRewards) ? 'success' : 'danger'
                     "
-                    >{{ props.row.personIncome.incomeRate }}</el-text
+                    >{{ formatNumber(props.row.totalRewards, 4) }}</el-text
                   >
                 </template>
               </el-table-column>
-              <el-table-column label="作者" width="120">
+              <el-table-column label="收益率" width="100">
+                <template #default="props">
+                  <el-text
+                    :type="
+                      isGreaterThan(props.row.personIncome.incomeRate, 1)
+                        ? 'success'
+                        : 'danger'
+                    "
+                    >{{ toPercent(props.row.personIncome.incomeRate) }}</el-text
+                  >
+                </template>
+              </el-table-column>
+              <el-table-column label="作者" width="100">
                 <template #default="props">
                   <a
                     v-if="props.row.auth === 'all'"
@@ -332,7 +342,7 @@ import { computed, ref, watchEffect } from "vue";
 import Countdown from "vue3-countdown";
 import classNames from "classnames";
 import { useGetListByAccount } from "../hooks/useGetList";
-import { isPositive, toPercent, formatMoment } from "../utils";
+import { isPositive, toPercent, formatMoment, isGreaterThan, formatNumber } from "../utils";
 import { Phase, QuestionStatus } from "../constants";
 import { IAccount } from "../apis/list";
 

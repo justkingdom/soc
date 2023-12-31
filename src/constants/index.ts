@@ -9,6 +9,8 @@ export const DEFAULT_VOTES_ONE_TO_SECOND = 20;
 export const HEIGHT_CONTAINER = 60 + 40 + 16 + 24;
 export const TOTAL_AIRDROP = 400_0000;
 
+export const GLOBAL_INTERVAL_TIME = +import.meta.env.VITE_GLOBAL_INTERVAL_TIME;
+
 export enum Phase {
   StepOne = "1",
   StepN = "2",

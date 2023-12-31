@@ -105,6 +105,7 @@ export interface IListItem {
   qStatus: 1;
   personIncome?: IPersonIncome;
   duration: string;
+  totalRewards?: string;
 }
 
 export async function fetchListNotLogin(params: PageParams) {

@@ -7,9 +7,13 @@
           <el-descriptions-item label="总数:">
             <span class="text-lg">{{ total }}</span>
           </el-descriptions-item>
+          <!-- <el-descriptions-item label="RANDOM:">
+            <span class="text-lg">{{ reactiveObject.count }}</span>
+          </el-descriptions-item> -->
         </el-descriptions>
       </aside>
       <el-table stripe :data="datas" :height="height">
+        <el-table-column type="index" width="50" />
         <el-table-column label="标题" width="400">
           <template #default="props">
             <div>
@@ -156,7 +160,7 @@
             <p v-if="isPositive(props.row.endCountdown)">
               <countdown :time="props.row.endCountdown" />
             </p>
-            <p v-else>已结束</p>
+            <el-text type="danger" v-else>已结束</el-text>
           </template>
         </el-table-column>
       </el-table>
