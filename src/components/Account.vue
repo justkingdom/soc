@@ -138,7 +138,13 @@
               <el-table-column label="倒计时" width="120" align="right">
                 <template #default="props">
                   <p v-if="isPositive(props.row.endCountdown)">
-                    <countdown :time="props.row.endCountdown" />
+                    <vue-countdown
+                      :time="props.row.endCountdown"
+                      :transform="transformCountDown"
+                      v-slot="{ days, hours, minutes, seconds }"
+                    >
+                      {{ `${days}:${hours}:${minutes}:${seconds}` }}
+                    </vue-countdown>
                   </p>
                   <p v-else>已结束</p>
                 </template>
@@ -339,12 +345,18 @@
 
 <script setup lang="ts">
 import { computed, ref, watchEffect } from "vue";
-import Countdown from "vue3-countdown";
 import classNames from "classnames";
 import { useGetListByAccount } from "../hooks/useGetList";
-import { isPositive, toPercent, formatMoment, isGreaterThan, formatNumber } from "../utils";
+import {
+  isPositive,
+  toPercent,
+  formatMoment,
+  isGreaterThan,
+  formatNumber,
+} from "../utils";
 import { Phase, QuestionStatus } from "../constants";
 import { IAccount } from "../apis/list";
+import { transformCountDown } from '../utils';
 
 const props = defineProps<{
   account: IAccount | null;
