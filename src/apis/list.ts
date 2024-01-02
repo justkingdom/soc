@@ -10,6 +10,7 @@ export interface IOps {
   voteTrend: Object;
   percent: string | number;
   color: VoteColor;
+  selected?: boolean;
 }
 
 export interface IAccount {

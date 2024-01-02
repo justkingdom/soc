@@ -27,10 +27,12 @@
   <article class="p-4 max-w-[1760px] mx-auto">
     <router-view />
   </article>
+  <user-updater />
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
+import UserUpdater from "./components/UserUpdater.vue";
 
 const activeIndex = computed(() => {
   return window.location.pathname;
