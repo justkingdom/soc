@@ -9,7 +9,7 @@ import {
   fetchListHot,
   fetchListNotLogin,
 } from "../apis/list";
-import { chain, isEqual, maxBy, minBy, sortBy, uniq, uniqBy, uniqWith } from "lodash";
+import { isEqual, maxBy, minBy, sortBy, uniqBy } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
 import {
   div,
