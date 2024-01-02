@@ -3,8 +3,8 @@ import {
 	useBoard,
 	useEthers,
 	useWallet,
-	displayChainName,
-	displayEther,
+	// displayChainName,
+	// displayEther,
 	shortenAddress,
 	useEthersHooks,
 	MetaMaskConnector,
@@ -88,9 +88,9 @@ onBeforeMount(async () => {
 	connectorsCreated.value = true
 })
 
-const { availableNetworks } = useEthers()
+// const { availableNetworks } = useEthers()
 
-const supportedChainId = Object.keys(availableNetworks.value).map(key => Number(key))
+// const supportedChainId = Object.keys(availableNetworks.value).map(key => Number(key))
 
 const selectedChainId = ref(0)
 
