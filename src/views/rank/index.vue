@@ -1,7 +1,7 @@
 <template>
   <article>
     <el-skeleton :rows="20" animated v-if="isLoading" />
-    <div class="mx-auto w-fit" v-else>
+    <div class="max-w-screen-lg mx-auto" v-else>
       <aside class="flex justify-end">
         <el-descriptions>
           <el-descriptions-item label="总数:">
@@ -10,8 +10,8 @@
         </el-descriptions>
       </aside>
       <el-table stripe :data="list">
-        <el-table-column label="序号" prop="order" width="120" />
-        <el-table-column label="账户" width="400">
+        <el-table-column label="序号" prop="order" min-width="12%" />
+        <el-table-column label="账户" min-width="28%">
           <template #default="props">
             <div class="flex items-center space-x-2">
               <el-avatar shape="square" :size="32" :src="props.row.photo" />
@@ -25,11 +25,6 @@
                     {{ props.row.nickname }}
                   </span>
                 </a>
-                <!-- <el-text
-                  class="underline cursor-pointer text-gray-500"
-                  :onClick="() => onShowAccount(props.row)"
-                  >账户详情</el-text
-                > -->
                 <a
                   class="underline cursor-pointer"
                   target="_blank"
@@ -44,7 +39,7 @@
         <el-table-column
           prop="totalIncome"
           label="总积分"
-          width="120"
+          min-width="20%"
           align="right"
           sortable
         >
@@ -52,7 +47,12 @@
             {{ formatNumber(props.row.totalIncome) }}
           </template>
         </el-table-column>
-        <el-table-column prop="percent" label="占比" width="160" align="right">
+        <el-table-column
+          prop="percent"
+          label="占比"
+          min-width="20%"
+          align="right"
+        >
           <template #default="props">
             {{ toPercent(props.row.percent) }}
           </template>
@@ -60,7 +60,7 @@
         <el-table-column
           prop="votes"
           label="奖励"
-          width="200"
+          min-width="20%"
           align="right"
           sortable
         >
@@ -90,9 +90,4 @@ function onHideAccount() {
   currentAccount.value = null;
   visibleAccount.value = false;
 }
-
-// function onShowAccount(account: IAccount) {
-//   currentAccount.value = account;
-//   visibleAccount.value = true;
-// }
 </script>

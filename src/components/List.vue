@@ -1,10 +1,10 @@
 <template>
   <article>
     <el-skeleton :rows="20" animated v-if="isLoading" />
-    <div class="mx-auto w-fit" v-else>
+    <div v-else>
       <el-table stripe :data="datas" :height="height">
-        <!-- <el-table-column type="index" width="50" /> -->
-        <el-table-column label="标题" width="400">
+        <el-table-column type="index" min-width="4%" />
+        <el-table-column label="标题" min-width="20%">
           <template #default="props">
             <div>
               <a
@@ -32,7 +32,7 @@
             </p>
           </template>
         </el-table-column>
-        <el-table-column width="480" label="选项">
+        <el-table-column min-width="24%" label="选项">
           <template #default="props">
             <div class="space-y-2">
               <div v-for="item in props.row.ops">
@@ -80,7 +80,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="作者" width="120">
+        <el-table-column label="作者" min-width="8%">
           <template #default="props">
             <a
               v-if="props.row.auth === 'all'"
@@ -99,62 +99,62 @@
         <el-table-column
           prop="spendPoint"
           label="积分消耗"
-          width="120"
+          min-width="8%"
           align="right"
           sortable
         />
         <el-table-column
           prop="voters"
           label="投票人数"
-          width="120"
+          min-width="8%"
           align="right"
           sortable
         />
         <el-table-column
           prop="votes"
           label="总票数"
-          width="100"
+          min-width="6%"
           align="right"
           sortable
         />
         <el-table-column
           prop="questionPrizePool"
           label="奖池"
-          width="100"
+          min-width="6%"
           align="right"
           sortable
         />
         <!-- <el-table-column
           prop="injectPoint"
           label="注入积分"
-          width="120"
+          min-width="8%"
           align="right"
           sortable
         /> -->
-        <!-- <el-table-column label="阶段" width="100" align="right">
+        <!-- <el-table-column label="阶段" min-width="6%" align="right">
           <template #default="props">
             <el-tag v-if="isLessThan(props.row.voters, 20)" type="warning"
               >辩论</el-tag
             >
           </template>
         </el-table-column> -->
-        <el-table-column label="创建时间" width="200" align="right">
+        <!-- <el-table-column label="创建时间" min-width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column>
-        <!-- <el-table-column label="周期" width="200" align="right">
+        </el-table-column> -->
+        <!-- <el-table-column label="周期" min-width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
             <p>{{ formatMoment(props.row.finishTime) }}</p>
           </template>
         </el-table-column> -->
-        <!-- <el-table-column label="周期" width="120" align="right">
+        <!-- <el-table-column label="周期" min-width="8%" align="right">
           <template #default="props">
             <p>{{ props.row.duration }}</p>
           </template>
         </el-table-column> -->
-        <el-table-column label="倒计时" width="150" align="right">
+        <el-table-column label="倒计时" min-width="12%" align="right">
           <template #default="props">
             <p v-if="isPositive(props.row.endCountdown)">
               <!-- <countdown :time="props.row.endCountdown" /> -->
@@ -163,7 +163,7 @@
                 :transform="transformCountDown"
                 v-slot="{ days, hours, minutes, seconds }"
               >
-                {{ `${days}:${hours}:${minutes}:${seconds}` }}
+                {{ `${days}天 ${hours}:${minutes}:${seconds}` }}
               </vue-countdown>
             </p>
             <el-text type="danger" v-else>已结束</el-text>

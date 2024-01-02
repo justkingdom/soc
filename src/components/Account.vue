@@ -25,7 +25,7 @@
               </el-descriptions>
             </aside>
             <el-table stripe :data="list">
-              <el-table-column label="标题" width="400">
+              <el-table-column label="标题" min-width="20%">
                 <template #default="props">
                   <div>
                     <a
@@ -45,7 +45,7 @@
                   </p>
                 </template>
               </el-table-column>
-              <el-table-column width="480" label="选项">
+              <el-table-column min-width="24%" label="选项">
                 <template #default="props">
                   <div class="space-y-2">
                     <div v-for="item in props.row.ops">
@@ -95,12 +95,12 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="作者答案" width="120" align="center">
+              <el-table-column label="作者答案" min-width="12%" align="center">
                 <template #default="props">
                   <p>{{ props.row.opsKey }}</p>
                 </template>
               </el-table-column>
-              <el-table-column label="作者" width="120">
+              <el-table-column label="作者" min-width="12%">
                 <template #default="props">
                   <a
                     v-if="props.row.auth === 'all'"
@@ -114,28 +114,28 @@
               <el-table-column
                 prop="spendPoint"
                 label="积分消耗"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="voters"
                 label="投票人数"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="votes"
                 label="总票数"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="questionPrizePool"
                 label="奖池"
-                width="100"
+                min-width="10%"
                 align="right"
               />
-              <el-table-column label="倒计时" width="120" align="right">
+              <el-table-column label="倒计时" min-width="16%" align="right">
                 <template #default="props">
                   <p v-if="isPositive(props.row.endCountdown)">
                     <vue-countdown
@@ -198,7 +198,7 @@
             </article>
 
             <el-table stripe :data="finishedList">
-              <el-table-column label="标题" width="360">
+              <el-table-column label="标题" min-width="20%">
                 <template #default="props">
                   <div>
                     <a
@@ -218,7 +218,7 @@
                   </p>
                 </template>
               </el-table-column>
-              <el-table-column width="440" label="选项">
+              <el-table-column min-width="24%" label="选项">
                 <template #default="props">
                   <div class="space-y-2">
                     <div v-for="item in props.row.ops">
@@ -268,12 +268,12 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="作者答案" width="80" align="center">
+              <el-table-column label="作者答案" min-width="8%" align="center">
                 <template #default="props">
                   <p>{{ props.row.opsKey }}</p>
                 </template>
               </el-table-column>
-              <el-table-column label="收益" width="80">
+              <el-table-column label="收益" min-width="8%">
                 <template #default="props">
                   <el-text
                     :type="
@@ -283,7 +283,7 @@
                   >
                 </template>
               </el-table-column>
-              <el-table-column label="收益率" width="100">
+              <el-table-column label="收益率" min-width="10%">
                 <template #default="props">
                   <el-text
                     :type="
@@ -295,7 +295,7 @@
                   >
                 </template>
               </el-table-column>
-              <el-table-column label="作者" width="100">
+              <el-table-column label="作者" min-width="10%">
                 <template #default="props">
                   <a
                     v-if="props.row.auth === 'all'"
@@ -309,28 +309,28 @@
               <el-table-column
                 prop="spendPoint"
                 label="积分消耗"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="voters"
                 label="投票人数"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="votes"
                 label="总票数"
-                width="100"
+                min-width="10%"
                 align="right"
               />
               <el-table-column
                 prop="questionPrizePool"
                 label="奖池"
-                width="100"
+                min-width="10%"
                 align="right"
               />
-              <el-table-column label="结束时间" width="200" align="right">
+              <el-table-column label="结束时间" min-width="12%" align="right">
                 <template #default="props">
                   <p>{{ formatMoment(props.row.finishTime) }}</p>
                 </template>
