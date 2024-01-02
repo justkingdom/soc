@@ -31,6 +31,8 @@ import {
   PAGE_MAX_SIZE,
 } from "../constants";
 import Decimal from "decimal.js";
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../store/user";
 
 export function useGetList() {
   const list = ref(null as ListData<IListItem> | null);
@@ -105,13 +107,45 @@ function formatRecords(records: Array<IListItem>, index?: number) {
   return sortBy(_records, (item) => item.endCountdown);
 }
 
-export function useGetIndexList(index: Ref<number>) {
-  const list = ref(null as Array<IListItem> | null);
+function useWatchUserList(list: Ref<Array<IListItem> | null>) {
+  const userStore = useUserStore();
+  const { myMaps } = storeToRefs(userStore);
+
+  watchEffect(() => {
+    const _list = list.value;
+    if (_list && myMaps.value.size > 0) {
+      list.value = _list.map((item: IListItem) => {
+        const _target = myMaps.value.get(item.qID);
+        if (_target) {
+          const ops = item.ops.map((option: IOps) => {
+            let selected = false;
+            if (option.k === _target.opsKey) {
+              selected = true;
+            }
+            return {
+              ...option,
+              selected,
+            };
+          });
+          return {
+            ...item,
+            ops,
+          };
+        }
+        return {
+          ...item,
+        };
+      });
+    }
+  });
+}
+
+export function useGetDetailList(index: Ref<number>) {
+  const list = ref([] as Array<IListItem>);
   const isLoading = ref(true);
   const total = ref(0);
 
   const fetchData = async () => {
-    console.log("index.value: ", index.value);
     const { data } = await fetchListHot({
       mark: index.value,
       pageSize: 20,
@@ -124,6 +158,8 @@ export function useGetIndexList(index: Ref<number>) {
     total.value = _list.length;
     isLoading.value = false;
   };
+
+  useWatchUserList(list);
 
   onMounted(async () => {
     isLoading.value = true;
@@ -176,7 +212,7 @@ export function useGetListHot() {
           console.warn("The empty index is ", index);
         }
       });
-      results = uniqBy(results, 'qID');
+      results = uniqBy(results, "qID");
       list.value = sortBy(results, (item) => item.endCountdown);
       store2.set(STORAGE_KEY_HOT_LIST, list.value);
       total.value = results.length;
@@ -185,13 +221,15 @@ export function useGetListHot() {
       console.error("Error:", error);
       const results = store2.has(STORAGE_KEY_HOT_LIST)
         ? store2.get(STORAGE_KEY_HOT_LIST)
-        : [] as Array<IListItem>;
+        : ([] as Array<IListItem>);
       const _list = formatRecords(results);
       list.value = sortBy(_list, (item) => item.endCountdown);
       total.value = results.length;
       isLoading.value = false;
     }
   };
+
+  useWatchUserList(list);
 
   onMounted(async () => {
     isLoading.value = true;
@@ -235,6 +273,8 @@ export function useGetListNotLogin() {
   useIntervalFn(() => {
     fetchData();
   }, GLOBAL_INTERVAL_TIME);
+
+  useWatchUserList(list);
 
   return {
     isLoading,

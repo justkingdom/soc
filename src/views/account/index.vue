@@ -380,15 +380,3 @@ const {
   finishedCorrectCostPoints,
 } = useGetListByAccount(computedAccount);
 </script>
-
-<style lang="scss">
-.el-progress {
-  .el-progress-bar__innerText {
-    width: 100%;
-    color: var(--el-table-text-color);
-    margin: 0;
-    height: 100%;
-    line-height: 22px;
-  }
-}
-</style>

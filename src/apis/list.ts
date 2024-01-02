@@ -10,6 +10,7 @@ export interface IOps {
   voteTrend: Object;
   percent: string | number;
   color: VoteColor;
+  selected?: boolean;
 }
 
 export interface IAccount {
@@ -144,6 +145,14 @@ export async function fetchListHot(params: PageHotParams) {
 export async function fetchListAccount(params: PageAccountParams) {
   return http.request<BaseResponse<ListData<IListItem>>>({
     url: `/qa/v1/personal/page/all`,
+    method: "get",
+    params,
+  });
+}
+
+export async function fetchAnswerList(params: PageAccountParams) {
+  return http.request<BaseResponse<ListData<IListItem>>>({
+    url: `/qa/v1/personal/page/answer`,
     method: "get",
     params,
   });

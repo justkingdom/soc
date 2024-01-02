@@ -54,7 +54,9 @@
                         )
                       "
                     >
-                      <p class="flex justify-between space-x-2 h-full">
+                      <p
+                        class="flex items-center justify-between space-x-2 h-full"
+                      >
                         <span class="space-x-2">
                           <span>{{ item.k }}</span>
                           <span>{{ item.v }}</span>
@@ -62,6 +64,9 @@
                         <el-text class="font-semibold">{{
                           toPercent(item.percent, 2, false)
                         }}</el-text>
+                        <el-icon v-if="item.selected === true" size="16" color="#409EFC"
+                          ><i-ep-select
+                        /></el-icon>
                       </p>
                     </div>
                   </el-progress>
@@ -75,6 +80,13 @@
                   <el-tag type="info" v-if="isPositive(item.opsVoteTotal)">{{
                     item.opsVoteTotal
                   }}</el-tag>
+                  <el-icon
+                    class="mt-1 align-middle"
+                    color="#409EFC"
+                    size="16"
+                    v-if="item.selected === true"
+                    ><i-ep-select
+                  /></el-icon>
                 </p>
               </div>
             </div>
@@ -178,11 +190,7 @@
 
 <script setup lang="ts">
 import classNames from "classnames";
-import {
-  isPositive,
-  toPercent,
-  transformCountDown,
-} from "../utils";
+import { isPositive, toPercent, transformCountDown } from "../utils";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";
@@ -223,15 +231,3 @@ function onShowAccount(account: IAccount) {
   visibleAccount.value = true;
 }
 </script>
-
-<style lang="scss">
-.el-progress {
-  .el-progress-bar__innerText {
-    width: 100%;
-    color: var(--el-table-text-color);
-    margin: 0;
-    height: 100%;
-    line-height: 22px;
-  }
-}
-</style>

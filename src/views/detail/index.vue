@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useGetIndexList } from "../../hooks/useGetList";
+import { useGetDetailList } from "../../hooks/useGetList";
 import List from "../../components/List.vue";
 import { useRoute } from "vue-router";
 import { computed } from "vue";
@@ -17,5 +17,5 @@ const computedPage = computed(() => {
   return 0;
 });
 
-const { isLoading, list, total } = useGetIndexList(computedPage);
+const { isLoading, list, total } = useGetDetailList(computedPage);
 </script>
