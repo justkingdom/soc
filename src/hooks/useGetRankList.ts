@@ -25,7 +25,7 @@ export function useGetRankList() {
   const fetchData = async () => {
     const { data } = await fetchRankList({
       page: 1,
-      pageSize: 1000,
+      pageSize: 500,
     });
     const totalIncome = data.rankUserDtoList.reduce(
 			(pre, cur) => plus(pre, cur.totalIncome),

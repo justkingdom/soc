@@ -14,7 +14,7 @@ import { useIntervalFn } from "@vueuse/core";
 import {
   div,
   formatDuration,
-  isLessThanOrEqualTo,
+  isLessThan,
   isPositive,
   isZero,
   minus,
@@ -69,7 +69,7 @@ function formatRecords(records: Array<IListItem>, index?: number) {
         .add(askTrendReward)
         .toFixed();
     }
-    const phase = isLessThanOrEqualTo(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
+    const phase = isLessThan(item.voters, DEFAULT_VOTES_ONE_TO_SECOND)
       ? Phase.StepOne
       : Phase.StepN;
     let ops = item.ops;
@@ -133,7 +133,7 @@ export function useGetIndexList(index: Ref<number>) {
 
   useIntervalFn(() => {
     fetchData();
-  }, GLOBAL_INTERVAL_TIME);
+  }, 1500);
 
   return {
     isLoading,
@@ -186,7 +186,8 @@ export function useGetListHot() {
       const results = store2.has(STORAGE_KEY_HOT_LIST)
         ? store2.get(STORAGE_KEY_HOT_LIST)
         : [] as Array<IListItem>;
-      list.value = sortBy(results, (item) => item.endCountdown);
+      const _list = formatRecords(results);
+      list.value = sortBy(_list, (item) => item.endCountdown);
       total.value = results.length;
       isLoading.value = false;
     }
@@ -200,7 +201,7 @@ export function useGetListHot() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 30000);
+  }, 60000);
 
   return {
     isLoading,

@@ -25,11 +25,18 @@
                     {{ props.row.nickname }}
                   </span>
                 </a>
-                <el-text
+                <!-- <el-text
                   class="underline cursor-pointer text-gray-500"
                   :onClick="() => onShowAccount(props.row)"
                   >账户详情</el-text
+                > -->
+                <a
+                  class="underline cursor-pointer"
+                  target="_blank"
+                  :href="`/account?id=${props.row.account}&nickname=${props.row.nickname}`"
                 >
+                  账户详情
+                </a>
               </div>
             </div>
           </template>
@@ -84,8 +91,8 @@ function onHideAccount() {
   visibleAccount.value = false;
 }
 
-function onShowAccount(account: IAccount) {
-  currentAccount.value = account;
-  visibleAccount.value = true;
-}
+// function onShowAccount(account: IAccount) {
+//   currentAccount.value = account;
+//   visibleAccount.value = true;
+// }
 </script>

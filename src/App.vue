@@ -20,11 +20,11 @@
     <router-link to="/trend">
       <el-menu-item index="/trend" class="text-lg">趋势</el-menu-item>
     </router-link>
-    <router-link to="/rank">
+    <!-- <router-link to="/rank">
       <el-menu-item index="/rank" class="text-lg">排行</el-menu-item>
-    </router-link>
+    </router-link> -->
   </el-menu>
-  <article class="p-4">
+  <article class="p-4 max-w-[1760px] mx-auto">
     <router-view />
   </article>
 </template>

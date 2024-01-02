@@ -18,10 +18,17 @@
                 {{ props.row.title }}
               </p>
             </div>
-            <p class="space-x-1">
+            <p class="flex space-x-1">
               <span>QID:</span>
               <span>{{ props.row.qID }}</span>
-              <span>(Index: {{ props.row.index }})</span>
+              <a
+                class="underline cursor-pointer"
+                target="_blank"
+                :href="`/detail?page=${props.row.index}`"
+                v-if="props.row.index !== undefined"
+              >
+                (Page: {{ props.row.index }})
+              </a>
             </p>
           </template>
         </el-table-column>
@@ -131,16 +138,17 @@
             >
           </template>
         </el-table-column> -->
-        <!-- <el-table-column label="创建时间" width="200" align="right">
+        <el-table-column label="创建时间" width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column>-->
-        <el-table-column label="结束时间" width="200" align="right">
+        </el-table-column>
+        <!-- <el-table-column label="周期" width="200" align="right">
           <template #default="props">
+            <p>{{ formatMoment(props.row.createTime) }}</p>
             <p>{{ formatMoment(props.row.finishTime) }}</p>
           </template>
-        </el-table-column> 
+        </el-table-column> -->
         <!-- <el-table-column label="周期" width="120" align="right">
           <template #default="props">
             <p>{{ props.row.duration }}</p>
