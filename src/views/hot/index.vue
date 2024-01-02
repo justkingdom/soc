@@ -1,11 +1,11 @@
 <template>
   <aside class="flex justify-between">
     <div>
-      <el-descriptions v-if="myUser">
-        <el-descriptions-item label="用户:">
-          <span class="text-lg">{{ myUser.nickname }}</span>
+      <el-descriptions v-if="myId">
+        <el-descriptions-item label="用户ID:">
+          <span class="text-lg">{{ myId }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="近7天投票:">
+        <el-descriptions-item label="近三天投票:">
           <span class="text-lg">{{ myTotal }}</span>
         </el-descriptions-item>
       </el-descriptions>
@@ -26,7 +26,7 @@ import List from "../../components/List.vue";
 import { useUserStore } from "../../store/user";
 
 const userStore = useUserStore();
-const { myTotal, myUser } = storeToRefs(userStore);
+const { myTotal, myId } = storeToRefs(userStore);
 
 const { isLoading, list, total } = useGetListHot();
 </script>

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from "../store/user";
 import { computed } from "vue";
-import { onMounted } from "vue";
-import { useUrlSearchParams, useIntervalFn } from "@vueuse/core";
+import { useUrlSearchParams } from "@vueuse/core";
 import { useGetAnswerList } from "../hooks/useGetAnswerList";
 import { watchEffect } from "vue";
 
@@ -27,7 +26,7 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (computedUser.value) {
-    userStore.fetchPersonal(computedUser.value);
+    userStore.myId = computedUser.value;
   }
 });
 

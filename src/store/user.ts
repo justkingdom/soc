@@ -6,6 +6,7 @@ import { IPeronsal, fetchPersonal } from '../apis/user';
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
+      myId: '' as string,
       myUser: null as IPeronsal | null,
       myList: null as null | Array<IListItem>
     };
@@ -27,7 +28,6 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async fetchPersonal(accountId: string) {
-      debugger
       if (accountId) {
         const { data } = await fetchPersonal(accountId);
         this.myUser = data;

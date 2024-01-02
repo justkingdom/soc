@@ -1,29 +1,8 @@
 import { Ref, onMounted, ref, watchEffect } from "vue";
-import { isEmpty, sortBy } from "lodash";
-import { useIntervalFn } from "@vueuse/core";
-import { fetchRankList } from "../apis/rank";
-import {
-  div,
-  isGreaterThanOrEqual,
-  isLessThanOrEqualTo,
-  multipliedBy,
-  plus,
-} from "../utils";
-import { TOTAL_AIRDROP } from "../constants";
+import { isEmpty } from "lodash";
+import { isGreaterThanOrEqual } from "../utils";
 import { IListItem, fetchAnswerList } from "../apis/list";
 import moment from "moment";
-
-interface IRankItem {
-  account: string;
-  nickname: string;
-  photo: string;
-  badge: null;
-  status: number;
-  totalIncome: number;
-  order: number;
-  percent: string;
-  airdrop: string;
-}
 
 export function useGetAnswerList(account: Ref<string>) {
   const list = ref(null as Array<IListItem> | null);
