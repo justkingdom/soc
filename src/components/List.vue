@@ -154,10 +154,17 @@
             <p>{{ props.row.duration }}</p>
           </template>
         </el-table-column> -->
-        <el-table-column label="倒计时" width="120" align="right">
+        <el-table-column label="倒计时" width="150" align="right">
           <template #default="props">
             <p v-if="isPositive(props.row.endCountdown)">
-              <countdown :time="props.row.endCountdown" />
+              <!-- <countdown :time="props.row.endCountdown" /> -->
+              <vue-countdown
+                :time="props.row.endCountdown"
+                :transform="transformCountDown"
+                v-slot="{ days, hours, minutes, seconds }"
+              >
+                {{ `${days}:${hours}:${minutes}:${seconds}` }}
+              </vue-countdown>
             </p>
             <el-text type="danger" v-else>已结束</el-text>
           </template>
@@ -171,8 +178,12 @@
 
 <script setup lang="ts">
 import classNames from "classnames";
-import Countdown from "vue3-countdown";
-import { isPositive, toPercent, formatMoment } from "../utils";
+import {
+  isPositive,
+  toPercent,
+  formatMoment,
+  transformCountDown,
+} from "../utils";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";

@@ -132,7 +132,13 @@
             <el-table-column label="倒计时" width="120" align="right">
               <template #default="props">
                 <p v-if="isPositive(props.row.endCountdown)">
-                  <countdown :time="props.row.endCountdown" />
+                  <vue-countdown
+                    :time="props.row.endCountdown"
+                    :transform="transformCountDown"
+                    v-slot="{ days, hours, minutes, seconds }"
+                  >
+                    {{ `${days}:${hours}:${minutes}:${seconds}` }}
+                  </vue-countdown>
                 </p>
                 <p v-else>已结束</p>
               </template>
@@ -331,7 +337,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
-import Countdown from "vue3-countdown";
 import classNames from "classnames";
 import { useGetListByAccount } from "../../hooks/useGetList";
 import {
@@ -340,6 +345,7 @@ import {
   formatMoment,
   isGreaterThan,
   formatNumber,
+  transformCountDown
 } from "../../utils";
 import { Phase, QuestionStatus } from "../../constants";
 import { IAccount } from "../../apis/list";
@@ -374,3 +380,15 @@ const {
   finishedCorrectCostPoints,
 } = useGetListByAccount(computedAccount);
 </script>
+
+<style lang="scss">
+.el-progress {
+  .el-progress-bar__innerText {
+    width: 100%;
+    color: var(--el-table-text-color);
+    margin: 0;
+    height: 100%;
+    line-height: 22px;
+  }
+}
+</style>

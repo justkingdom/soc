@@ -1,6 +1,12 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@chenfengyuan/vue-countdown':
+    specifier: '2'
+    version: 2.1.2(vue@3.4.3)
+  '@fontsource/golos-ui':
+    specifier: ^4.5.3
+    version: 4.5.3
   '@vueuse/core':
     specifier: ^10.7.1
     version: 10.7.1(vue@3.4.3)
@@ -32,14 +38,11 @@ dependencies:
     specifier: ^2.14.2
     version: 2.14.2
   vue:
-    specifier: ^3.2.47
+    specifier: ^3.4.3
     version: 3.4.3(typescript@5.3.3)
   vue-router:
     specifier: ^4.2.0
     version: 4.2.5(vue@3.4.3)
-  vue3-countdown:
-    specifier: ^1.0.6
-    version: 1.0.6(vue@3.4.3)
 
 devDependencies:
   '@iconify-json/ep':
@@ -158,6 +161,14 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+
+  /@chenfengyuan/vue-countdown@2.1.2(vue@3.4.3):
+    resolution: {integrity: sha512-/XDKIQzDDBc+4hXb681B1+ySKrStCTZONspRp+TojMcMe1edpCpuk4E/QoNVYxyZ24d+pcwN1YqnfIDgc7haBA==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.4.3(typescript@5.3.3)
+    dev: false
 
   /@ctrl/tinycolor@3.6.1:
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}
@@ -422,6 +433,10 @@ packages:
 
   /@floating-ui/utils@0.1.6:
     resolution: {integrity: sha512-OfX7E2oUDYxtBvsuS4e/jSn4Q9Qb6DzgeYtsAdkPZ47znpoNsMgZw0+tVijiv3uGNR6dgNlty6r9rzIzHjtd/A==}
+    dev: false
+
+  /@fontsource/golos-ui@4.5.3:
+    resolution: {integrity: sha512-TIU72flYhSmg3L7XURurAsihV8W3IdiIFMMtfO41NmGOyi1V6eYiOIVpFINFecbBf291JOMUgWosybkWDZVaaQ==}
     dev: false
 
   /@humanwhocodes/config-array@0.11.13:
@@ -3853,14 +3868,6 @@ packages:
       semver: 7.5.4
       typescript: 5.3.3
     dev: true
-
-  /vue3-countdown@1.0.6(vue@3.4.3):
-    resolution: {integrity: sha512-GQb9AikfXauUWURW4wwGowqIv7kuC/NiNQyDZ63SEup273TxcKvE6fmWDIjHt6XXn4mewgcggL0gjABQ+ZFzdA==}
-    peerDependencies:
-      vue: ^3.0.0
-    dependencies:
-      vue: 3.4.3(typescript@5.3.3)
-    dev: false
 
   /vue@3.4.3(typescript@5.3.3):
     resolution: {integrity: sha512-GjN+culMAGv/mUbkIv8zMKItno8npcj5gWlXkSxf1SPTQf8eJ4A+YfHIvQFyL1IfuJcMl3soA7SmN1fRxbf/wA==}

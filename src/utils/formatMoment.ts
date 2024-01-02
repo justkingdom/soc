@@ -32,3 +32,13 @@ export function formatDuration(
     24
   )}时`;
 }
+
+export function transformCountDown(props: Record<string, number>) {
+  const formattedProps = {} as Record<string, string>;
+
+  Object.entries(props).forEach(([key, value]) => {
+    formattedProps[key] = value < 10 ? `0${value}` : String(value);
+  });
+
+  return formattedProps;
+}
