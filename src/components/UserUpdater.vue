@@ -3,6 +3,8 @@ import { useUserStore } from "../store/user";
 import { computed } from "vue";
 import { onMounted } from "vue";
 import { useUrlSearchParams, useIntervalFn } from "@vueuse/core";
+import { useGetAnswerList } from "../hooks/useGetAnswerList";
+import { watchEffect } from "vue";
 
 const params = useUrlSearchParams("history");
 
@@ -13,19 +15,33 @@ const computedUser = computed(() => {
   return "";
 });
 
+const { list } = useGetAnswerList(computedUser);
+
 const userStore = useUserStore();
 
-onMounted(() => {
-  if (computedUser.value) {
-    userStore.fetchMyList(computedUser.value);
+watchEffect(() => {
+  if (list.value) {
+    userStore.myList = list.value;
   }
 });
 
-useIntervalFn(() => {
+watchEffect(() => {
   if (computedUser.value) {
-    userStore.fetchMyList(computedUser.value);
+    userStore.fetchPersonal(computedUser.value);
   }
-}, 30000);
+});
+
+// onMounted(() => {
+//   if (computedUser.value) {
+//     userStore.fetchMyList(computedUser.value);
+//   }
+// });
+
+// useIntervalFn(() => {
+//   if (computedUser.value) {
+//     userStore.fetchMyList(computedUser.value);
+//   }
+// }, 30000);
 </script>
 
 <template></template>

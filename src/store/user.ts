@@ -1,30 +1,37 @@
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { IListItem, fetchListAccount } from '../apis/list';
+import { IListItem } from '../apis/list';
 import { arrayToMap } from '../utils';
+import { IPeronsal, fetchPersonal } from '../apis/user';
 
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
+      myUser: null as IPeronsal | null,
       myList: null as null | Array<IListItem>
     };
   },
   getters: {
+    myTotal(): number {
+      if (!this.myList) {
+        return 0;
+      }
+      return this.myList.length;
+    },
     myMaps(): Map<string, IListItem> {
       if (!this.myList) {
         return new Map();
       }
+      console.log('myMaps: ', this.myList.length);
       return arrayToMap(this.myList, 'qID');
     },
   },
   actions: {
-    async fetchMyList(accountId: string) {
-      const { data } = await fetchListAccount({
-        mark: 0,
-        pageSize: 20,
-        account: accountId,
-      });
-      const records = data.records;
-      this.myList = records;
+    async fetchPersonal(accountId: string) {
+      debugger
+      if (accountId) {
+        const { data } = await fetchPersonal(accountId);
+        this.myUser = data;
+      }
     }
   },
 });

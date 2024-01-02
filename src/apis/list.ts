@@ -149,3 +149,11 @@ export async function fetchListAccount(params: PageAccountParams) {
     params,
   });
 }
+
+export async function fetchAnswerList(params: PageAccountParams) {
+  return http.request<BaseResponse<ListData<IListItem>>>({
+    url: `/qa/v1/personal/page/answer`,
+    method: "get",
+    params,
+  });
+}
