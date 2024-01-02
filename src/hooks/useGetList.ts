@@ -9,7 +9,7 @@ import {
   fetchListHot,
   fetchListNotLogin,
 } from "../apis/list";
-import { isEqual, maxBy, minBy, sortBy } from "lodash";
+import { chain, isEqual, maxBy, minBy, sortBy, uniq, uniqBy, uniqWith } from "lodash";
 import { useIntervalFn } from "@vueuse/core";
 import {
   div,
@@ -176,7 +176,7 @@ export function useGetListHot() {
           console.warn("The empty index is ", index);
         }
       });
-
+      results = uniqBy(results, 'qID');
       list.value = sortBy(results, (item) => item.endCountdown);
       store2.set(STORAGE_KEY_HOT_LIST, list.value);
       total.value = results.length;
