@@ -2,7 +2,7 @@
 import { useUserStore } from "../store/user";
 import { computed } from "vue";
 import { onMounted } from "vue";
-import { useUrlSearchParams } from "@vueuse/core";
+import { useUrlSearchParams, useIntervalFn } from "@vueuse/core";
 
 const params = useUrlSearchParams("history");
 
@@ -20,6 +20,12 @@ onMounted(() => {
     userStore.fetchMyList(computedUser.value);
   }
 });
+
+useIntervalFn(() => {
+  if (computedUser.value) {
+    userStore.fetchMyList(computedUser.value);
+  }
+}, 30000);
 </script>
 
 <template></template>
