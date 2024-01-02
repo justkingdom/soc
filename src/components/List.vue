@@ -181,7 +181,6 @@ import classNames from "classnames";
 import {
   isPositive,
   toPercent,
-  formatMoment,
   transformCountDown,
 } from "../utils";
 import { computed, reactive, ref, watch } from "vue";
