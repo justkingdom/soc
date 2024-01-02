@@ -20,6 +20,7 @@
     <router-link to="/trend">
       <el-menu-item index="/trend" class="text-lg">趋势</el-menu-item>
     </router-link>
+    <wallet></wallet>
     <!-- <router-link to="/rank">
       <el-menu-item index="/rank" class="text-lg">排行</el-menu-item>
     </router-link> -->
@@ -31,6 +32,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import Wallet from "./components/Wallet.vue";
 
 const activeIndex = computed(() => {
   return window.location.pathname;

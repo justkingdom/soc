@@ -20,13 +20,14 @@
     "element-plus": "^2.3.4",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-util": "^7.1.5",
-    "ethers": "^6.9.1",
     "highlight.js": "^11.8.0",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "pinia": "^2.0.36",
     "store2": "^2.14.2",
-    "vue": "^3.4.3",
+    "ethers": ">=5.6.8",
+		"vue": "3.2.36",
+    "vue-dapp": "^0.12.0-beta.7",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
