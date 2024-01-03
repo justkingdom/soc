@@ -18,6 +18,6 @@
   }
 }
 
-.el-descriptions__cell {
+.el-descriptions .el-descriptions__body .el-descriptions__cell:not(:last-child) {
   padding-right: 24px;
 }

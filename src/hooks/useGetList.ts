@@ -4,7 +4,7 @@ import {
   IAccount,
   IListItem,
   IOps,
-  fetchListAccount,
+  fetchAnswerList,
   fetchListHomeB,
   fetchListHot,
   fetchListNotLogin,
@@ -29,6 +29,7 @@ import {
   GLOBAL_INTERVAL_TIME,
   STORAGE_KEY_HOT_LIST,
   PAGE_MAX_SIZE,
+  ONE_MINUTE,
 } from "../constants";
 import Decimal from "decimal.js";
 import { storeToRefs } from "pinia";
@@ -239,7 +240,7 @@ export function useGetListHot() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 60000);
+  }, ONE_MINUTE);
 
   return {
     isLoading,
@@ -313,7 +314,7 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
 
   const fetchData = async () => {
     if (account && account.value) {
-      const { data } = await fetchListAccount({
+      const { data } = await fetchAnswerList({
         mark: 0,
         pageSize: 20,
         account: account.value.account,
