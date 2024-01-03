@@ -5,7 +5,7 @@
         <el-descriptions-item label="用户ID:">
           <span class="text-lg">{{ myId }}</span>
         </el-descriptions-item>
-        <el-descriptions-item label="近7天投票:">
+        <el-descriptions-item label="近20个投票:">
           <span class="text-lg">{{ myTotal }}</span>
         </el-descriptions-item>
       </el-descriptions>
@@ -39,7 +39,8 @@ const computedUser = computed(() => {
   return "";
 });
 
-const { list: answerList, refetch: refetchAnswerList } = useGetAnswerList(computedUser);
+const { list: answerList, refetch: refetchAnswerList } =
+  useGetAnswerList(computedUser);
 
 const userStore = useUserStore();
 

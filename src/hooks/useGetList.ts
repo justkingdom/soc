@@ -4,7 +4,7 @@ import {
   IAccount,
   IListItem,
   IOps,
-  fetchListAccount,
+  fetchAnswerList,
   fetchListHomeB,
   fetchListHot,
   fetchListNotLogin,
@@ -314,7 +314,7 @@ export function useGetListByAccount(account: Ref<IAccount | null>) {
 
   const fetchData = async () => {
     if (account && account.value) {
-      const { data } = await fetchListAccount({
+      const { data } = await fetchAnswerList({
         mark: 0,
         pageSize: 20,
         account: account.value.account,

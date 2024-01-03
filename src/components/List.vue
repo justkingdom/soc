@@ -3,7 +3,7 @@
     <el-skeleton :rows="20" animated v-if="isLoading" />
     <div v-else>
       <el-table stripe :data="datas" :height="height">
-        <el-table-column type="index" min-width="4%" />
+        <el-table-column type="index" width="48" />
         <el-table-column label="标题" min-width="20%">
           <template #default="props">
             <div>
@@ -64,7 +64,10 @@
                         <el-text class="font-semibold">{{
                           toPercent(item.percent, 2, false)
                         }}</el-text>
-                        <el-icon v-if="item.selected === true" size="16" color="#409EFC"
+                        <el-icon
+                          v-if="item.selected === true"
+                          size="16"
+                          color="#409EFC"
                           ><i-ep-select
                         /></el-icon>
                       </p>
@@ -150,11 +153,11 @@
             >
           </template>
         </el-table-column> -->
-        <!-- <el-table-column label="创建时间" min-width="200" align="right">
+        <el-table-column label="创建时间" min-width="12%" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <!-- <el-table-column label="周期" min-width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
@@ -190,7 +193,12 @@
 
 <script setup lang="ts">
 import classNames from "classnames";
-import { isPositive, toPercent, transformCountDown } from "../utils";
+import {
+  isPositive,
+  toPercent,
+  transformCountDown,
+  formatMoment,
+} from "../utils";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";
