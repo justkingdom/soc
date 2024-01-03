@@ -20,6 +20,7 @@ import { computed, watchEffect } from "vue";
 import { useUserStore } from "../../store/user";
 import { storeToRefs } from "pinia";
 import { useGetAnswerList2 } from "../../hooks/useGetAnswerList";
+import { isEmpty } from "lodash";
 
 const params = useUrlSearchParams("history");
 const { query } = useRoute();
@@ -37,7 +38,7 @@ const { list: answerList, refetch: refetchAnswerList } =
   useGetAnswerList2(computedUser);
 
 watchEffect(() => {
-  if (answerList.value) {
+  if (answerList.value && !isEmpty(answerList.value)) {
     userStore.myList = answerList.value;
   }
 });
@@ -46,7 +47,7 @@ useIntervalFn(() => {
   if (computedUser.value) {
     refetchAnswerList();
   }
-}, 1500);
+}, 2000);
 
 const computedPage = computed(() => {
   if (query.page) {

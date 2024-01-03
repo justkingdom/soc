@@ -24,7 +24,10 @@
               <a
                 class="underline cursor-pointer"
                 target="_blank"
-                :href="`/detail?page=${props.row.index}`"
+                :href="
+                  `/detail?page=${props.row.index}` +
+                  (params.user ? `&user=${params.user}` : '')
+                "
                 v-if="props.row.index !== undefined"
               >
                 (Page: {{ props.row.index }})
@@ -199,6 +202,7 @@ import {
   transformCountDown,
   formatMoment,
 } from "../utils";
+import { useUrlSearchParams } from "@vueuse/core";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";
@@ -209,6 +213,8 @@ const props = defineProps<{
   isLoading: boolean;
   total: number;
 }>();
+
+const params = useUrlSearchParams("history");
 
 const height = computed(() => {
   return window.innerHeight - HEIGHT_CONTAINER;
