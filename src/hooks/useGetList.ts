@@ -29,6 +29,7 @@ import {
   GLOBAL_INTERVAL_TIME,
   STORAGE_KEY_HOT_LIST,
   PAGE_MAX_SIZE,
+  ONE_MINUTE,
 } from "../constants";
 import Decimal from "decimal.js";
 import { storeToRefs } from "pinia";
@@ -239,7 +240,7 @@ export function useGetListHot() {
 
   useIntervalFn(() => {
     fetchData();
-  }, 60000);
+  }, ONE_MINUTE);
 
   return {
     isLoading,

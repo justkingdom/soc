@@ -15,6 +15,8 @@ export const STORAGE_KEY_CURRENT_MARK = 'STORAGE_KEY_CURRENT_MARK';
 
 export const GLOBAL_INTERVAL_TIME = +import.meta.env.VITE_GLOBAL_INTERVAL_TIME;
 
+export const ONE_MINUTE = 60_000;
+
 export enum Phase {
   StepOne = "1",
   StepN = "2",

@@ -29,6 +29,12 @@ export function useGetAnswerList(account: Ref<string>) {
     }
   };
 
+  const onRefetch = () => {
+    mark.value = 0;
+    results = [];
+    fetchData();
+  };
+
   watchEffect(() => {
     if (
       account.value &&
@@ -49,5 +55,6 @@ export function useGetAnswerList(account: Ref<string>) {
   return {
     list,
     total,
+    refetch: onRefetch
   };
 }
