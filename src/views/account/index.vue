@@ -265,7 +265,7 @@
                 <p>{{ props.row.opsKey }}</p>
               </template>
             </el-table-column>
-            <el-table-column label="收益" min-width="8%">
+            <el-table-column label="总收益" min-width="8%" align="right">
               <template #default="props">
                 <el-text
                   :type="
@@ -275,7 +275,19 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column label="收益率" min-width="10%">
+            <el-table-column label="提问收益" min-width="8%" align="right">
+              <template #default="props">
+                <el-text
+                  :type="
+                    isPositive(props.row.personIncome.askShareReward) ? 'success' : ''
+                  "
+                  >{{
+                    formatNumber(props.row.personIncome.askShareReward, 4)
+                  }}</el-text
+                >
+              </template>
+            </el-table-column>
+            <el-table-column label="收益率" min-width="8%" align="right">
               <template #default="props">
                 <el-text
                   :type="
@@ -287,7 +299,7 @@
                 >
               </template>
             </el-table-column>
-            <el-table-column label="作者" min-width="10%">
+            <el-table-column label="作者" min-width="8%">
               <template #default="props">
                 <a
                   v-if="props.row.auth === 'all'"
@@ -301,25 +313,25 @@
             <el-table-column
               prop="spendPoint"
               label="积分消耗"
-              min-width="10%"
+              min-width="8%"
               align="right"
             />
             <el-table-column
               prop="voters"
               label="投票人数"
-              min-width="10%"
+              min-width="8%"
               align="right"
             />
             <el-table-column
               prop="votes"
               label="总票数"
-              min-width="10%"
+              min-width="8%"
               align="right"
             />
             <el-table-column
               prop="questionPrizePool"
               label="奖池"
-              min-width="10%"
+              min-width="8%"
               align="right"
             />
             <el-table-column label="结束时间" min-width="16%" align="right">
@@ -345,7 +357,7 @@ import {
   formatMoment,
   isGreaterThan,
   formatNumber,
-  transformCountDown
+  transformCountDown,
 } from "../../utils";
 import { Phase, QuestionStatus } from "../../constants";
 import { IAccount } from "../../apis/list";
