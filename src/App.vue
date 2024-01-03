@@ -20,11 +20,12 @@
     <router-link to="/trend">
       <el-menu-item index="/trend" class="text-lg">趋势</el-menu-item>
     </router-link>
-    <!-- <wallet></wallet> -->
     <!-- <router-link to="/rank">
       <el-menu-item index="/rank" class="text-lg">排行</el-menu-item>
     </router-link> -->
   </el-menu>
+  <article class="max-w-[1760px] mx-auto text-right"><wallet></wallet></article>
+  
   <article class="p-4 max-w-[1760px] mx-auto">
     <router-view />
   </article>
@@ -33,7 +34,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-// import Wallet from "./components/Wallet.vue";
+import Wallet from "./components/Wallet.vue";
 import UserUpdater from "./components/UserUpdater.vue";
 
 const activeIndex = computed(() => {

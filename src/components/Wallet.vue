@@ -9,14 +9,14 @@ import {
 	useEthersHooks,
 	MetaMaskConnector,
 	WalletConnectConnector,
-	CoinbaseWalletConnector,
+	// CoinbaseWalletConnector,
 	SafeConnector,
 	Connector,
 } from "vue-dapp"
 import { onBeforeMount, ref, watch } from 'vue'
 
-const isDev = import.meta.env.DEV
-const infuraId = isDev ? import.meta.env.VITE_INFURA_KEY : 'ff6a249a74e048f1b413cba715f98d07'
+// const isDev = import.meta.env.DEV
+// const infuraId = isDev ? import.meta.env.VITE_INFURA_KEY : 'ff6a249a74e048f1b413cba715f98d07'
 
 const { open } = useBoard()
 const { wallet, disconnect, onDisconnect, onAccountsChanged, onChainChanged } = useWallet()
@@ -47,22 +47,22 @@ let connectors: Connector[] = [
 		qrModalOptions: {
 			themeMode: 'dark',
 			themeVariables: undefined,
-			chainImages: undefined,
+			// chainImages: undefined,
 			desktopWallets: undefined,
 			walletImages: undefined,
 			mobileWallets: undefined,
 			enableExplorer: true,
-			explorerAllowList: undefined,
-			tokenImages: undefined,
+			// explorerAllowList: undefined,
+			// tokenImages: undefined,
 			privacyPolicyUrl: undefined,
-			explorerDenyList: undefined,
+			// explorerDenyList: undefined,
 			termsOfServiceUrl: undefined,
 		},
 	}),
-	new CoinbaseWalletConnector({
-		appName: 'Vue Dapp',
-		jsonRpcUrl: `https://mainnet.infura.io/v3/${infuraId}`,
-	}),
+	// new CoinbaseWalletConnector({
+	// 	appName: 'Vue Dapp',
+	// 	jsonRpcUrl: `https://mainnet.infura.io/v3/${infuraId}`,
+	// }),
 ]
 
 // only check whether it's in the iframe
