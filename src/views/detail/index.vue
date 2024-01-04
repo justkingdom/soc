@@ -47,7 +47,7 @@ useIntervalFn(() => {
   if (computedUser.value) {
     refetchAnswerList();
   }
-}, 2000);
+}, 1000);
 
 const computedPage = computed(() => {
   if (query.page) {
