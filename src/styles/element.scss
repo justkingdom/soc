@@ -21,3 +21,13 @@
 .el-descriptions .el-descriptions__body .el-descriptions__cell:not(:last-child) {
   padding-right: 24px;
 }
+
+.el-radio-group {
+  display: block;
+  .el-radio {
+    display: block;
+    &:hover {
+      border-color: #409eff;
+    }
+  }
+}

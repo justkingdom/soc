@@ -80,7 +80,12 @@
                     item.opsVoteTotal
                   }}</el-text>
                 </div>
-                <p class="flex space-x-2" v-else>
+                <el-radio
+                  v-else
+                  :label="item.k"
+                  border
+                  @click="onSubmit(item.k, props.row.qID)"
+                >
                   <span>{{ item.k }}</span>
                   <span>{{ item.v }}</span>
                   <el-tag type="info" v-if="isPositive(item.opsVoteTotal)">{{
@@ -93,7 +98,7 @@
                     v-if="item.selected === true"
                     ><i-ep-select
                   /></el-icon>
-                </p>
+                </el-radio>
               </div>
             </div>
           </template>
@@ -207,6 +212,7 @@ import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
 import Account from "./Account.vue";
 import { IListItem, IAccount } from "../apis/list";
+import { useSubmitAnswer } from "../hooks/useSubmitAnswer";
 
 const props = defineProps<{
   datas: Array<IListItem> | null;
@@ -244,4 +250,6 @@ function onShowAccount(account: IAccount) {
   currentAccount.value = account;
   visibleAccount.value = true;
 }
+
+const { onSubmit } = useSubmitAnswer();
 </script>
