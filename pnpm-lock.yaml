@@ -22,6 +22,9 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
+  buffer:
+    specifier: ^6.0.3
+    version: 6.0.3
   classnames:
     specifier: ^2.5.0
     version: 2.5.0
@@ -1114,6 +1117,7 @@ packages:
     dependencies:
       is-glob: 4.0.3
       micromatch: 4.0.5
+      napi-wasm: 1.1.0
     dev: false
     bundledDependencies:
       - napi-wasm
@@ -4631,6 +4635,10 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /napi-wasm@1.1.0:
+    resolution: {integrity: sha512-lHwIAJbmLSjF9VDRm9GoVOy9AGp3aIvkjv+Kvz9h16QR3uSVYH78PNQUnT2U4X53mhlnV2M7wrhibQ3GHicDmg==}
+    dev: false
 
   /native-dash@1.25.0(happy-dom@8.9.0)(sass@1.62.1):
     resolution: {integrity: sha512-vJy1ZEfR/9jpAtuvsbPE/PuaeaJLIS+p7tl/bKEMHutRzMHnmgLv1fSmbyVvL04s2qzg0rCKZX5yfX74uiPLyA==}

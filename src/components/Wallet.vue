@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-	useBoard,
+	// useBoard,
 	useEthers,
 	useWallet,
 	// displayChainName,
@@ -14,12 +14,14 @@ import {
 	Connector,
 } from "vue-dapp"
 import { onBeforeMount, ref, watch } from 'vue'
-
+import {fetchRandomString,fetchWalletLogin} from "../apis/account";
+import store2 from "store2";
+import { STORAGE_KEY_LOGIN_INFO} from "../constants";
 // const isDev = import.meta.env.DEV
 // const infuraId = isDev ? import.meta.env.VITE_INFURA_KEY : 'ff6a249a74e048f1b413cba715f98d07'
 
-const { open } = useBoard()
-const { wallet, disconnect, onDisconnect, onAccountsChanged, onChainChanged } = useWallet()
+// const { open } = useBoard()
+const { wallet, disconnect, onDisconnect, onAccountsChanged, onChainChanged,connectWith } = useWallet()
 const { address, balance, chainId, isActivated, dnsAlias } = useEthers()
 const { onActivated, onChanged } = useEthersHooks()
 
@@ -76,7 +78,6 @@ const connectorsCreated = ref(false)
 onBeforeMount(async () => {
 	const safe = new SafeConnector()
 	// check SafeAppSDK is available
-  console.log(safe)
 	try {
 		if (await safe.isSafeApp()) {
 			connectors = [safe]
@@ -104,6 +105,38 @@ onChanged(() => {
 	isChainChanged.value = true
 })
 
+
+const onClickWallet = async () => {
+			try {
+        await connectWith(new MetaMaskConnector({
+          appUrl: 'http://localhost:3000',
+        }))
+        console.log(address.value)
+        const {data} = await fetchRandomString({
+          language: "zh",
+          scene: "login",
+          walletAddress: address.value
+        })
+        const from = address.value;
+        const msg = `0x${Buffer.from(data, 'utf8').toString('hex')}`;
+        console.log(wallet.provider)
+        const sign = await wallet.provider?.request({
+          method: 'personal_sign',
+          params: [msg, from],
+        });
+        console.log(sign)
+        const loginInfo = await fetchWalletLogin({
+          walletSign: sign,
+          walletAddress: address.value
+        })
+        store2.set(STORAGE_KEY_LOGIN_INFO, loginInfo);
+				console.log(loginInfo)
+
+			} catch (err: any) {
+				console.log(err)
+			}
+		}
+
 // For turning back to previous chainId without calling switchChain() again
 const switchError = ref(false)
 watch(selectedChainId, async (val, oldVal) => {
@@ -124,14 +157,14 @@ watch(selectedChainId, async (val, oldVal) => {
 	}
 })
 
-const connectErrorHandler = (error: any) => {
-	console.error('Connect error: ', error)
-}
+// const connectErrorHandler = (error: any) => {
+// 	console.error('Connect error: ', error)
+// }
 </script>
 <template>
  <div class="m-4">
   {{ shortenAddress(address) }}
-			<button @click="isActivated ? disconnect() : open()" class="btn" :disabled="wallet.status === 'connecting'">
+			<button @click="isActivated ? disconnect() : onClickWallet()" class="btn" :disabled="wallet.status === 'connecting'">
 				{{
 					wallet.status === 'connected'
 						? 'Disconnect'
@@ -143,9 +176,7 @@ const connectErrorHandler = (error: any) => {
 				}}
 			</button>
 		</div>
-    <vd-board v-if="connectorsCreated" :connectors="connectors" :connectErrorHandler="connectErrorHandler" dark>
-		<!-- <template #loading>
-      <div v-if="wallet.status === 'loading'"></div>
-    </template> -->
-	</vd-board>
+    <!-- <vd-board v-if="connectorsCreated" :connectors="connectors" :connectErrorHandler="connectErrorHandler" dark>
+
+	</vd-board> -->
 </template>

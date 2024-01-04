@@ -13,6 +13,14 @@ import router from "./router";
 // 引入全局样式
 import "@/styles/index.scss";
 import "highlight.js/styles/atom-one-dark.css";
+import * as buffer from "buffer";
+
+if (typeof (window as any).global === "undefined") {
+  (window as any).global = window;
+}
+if (typeof (window as any).Buffer === "undefined") {
+  (window as any).Buffer = buffer.Buffer;
+}
 
 const app = createApp(App);
 

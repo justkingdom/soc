@@ -10,8 +10,9 @@ export const HEIGHT_CONTAINER = 60 + 40 + 16 + 24;
 export const TOTAL_AIRDROP = 400_0000;
 export const PAGE_MAX_SIZE = 21;
 
-export const STORAGE_KEY_HOT_LIST = 'STORAGE_KEY_HOT_LIST';
-export const STORAGE_KEY_CURRENT_MARK = 'STORAGE_KEY_CURRENT_MARK';
+export const STORAGE_KEY_HOT_LIST = "STORAGE_KEY_HOT_LIST";
+export const STORAGE_KEY_CURRENT_MARK = "STORAGE_KEY_CURRENT_MARK";
+export const STORAGE_KEY_LOGIN_INFO = "STORAGE_KEY_LOGIN_INFO";
 
 export const GLOBAL_INTERVAL_TIME = +import.meta.env.VITE_GLOBAL_INTERVAL_TIME;
 
@@ -37,7 +38,6 @@ export enum VoteColor {
 }
 
 export enum QuestionStatus {
-  Doing = 'Doing',
-  Finished = 'Finished'
+  Doing = "Doing",
+  Finished = "Finished",
 }
-

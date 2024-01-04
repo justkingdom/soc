@@ -24,6 +24,13 @@ type BaseResponse<T> = {
   data: T;
   message: string;
   time: number;
+  idToken?: string | null;
+  isRegister?: boolean;
+  password?: string;
+  refreshToken?: string;
+  token?: string;
+  tokenTime?: number;
+  userType: string;
 };
 
 // 列表数据
@@ -34,5 +41,3 @@ type ListData<T> = {
   current: number;
   mark: number;
 };
-
-
