@@ -8,14 +8,14 @@ import {
 	shortenAddress,
 	useEthersHooks,
 	MetaMaskConnector,
-	WalletConnectConnector,
+	// WalletConnectConnector,
 	// CoinbaseWalletConnector,
-	SafeConnector,
-	Connector,
+	// SafeConnector,
+	// Connector,
 } from "vue-dapp"
-import { onBeforeMount, ref, watch } from 'vue'
+import {  ref, watch } from 'vue'
 import {fetchRandomString,fetchWalletLogin} from "../apis/account";
-import store2 from "store2";
+import store2 from 'store2';
 import { STORAGE_KEY_LOGIN_INFO} from "../constants";
 // const isDev = import.meta.env.DEV
 // const infuraId = isDev ? import.meta.env.VITE_INFURA_KEY : 'ff6a249a74e048f1b413cba715f98d07'
@@ -38,34 +38,34 @@ onChainChanged((chainId: any) => {
 	console.log('chain changed', chainId)
 })
 
-let connectors: Connector[] = [
-	new MetaMaskConnector({
-		appUrl: 'http://localhost:3000',
-	}),
-	new WalletConnectConnector({
-		projectId: '3f3c98042b194264687bf59e104c534a',
-		chains: [1],
-		showQrModal: true,
-		qrModalOptions: {
-			themeMode: 'dark',
-			themeVariables: undefined,
-			// chainImages: undefined,
-			desktopWallets: undefined,
-			walletImages: undefined,
-			mobileWallets: undefined,
-			enableExplorer: true,
-			// explorerAllowList: undefined,
-			// tokenImages: undefined,
-			privacyPolicyUrl: undefined,
-			// explorerDenyList: undefined,
-			termsOfServiceUrl: undefined,
-		},
-	}),
+// let connectors: Connector[] = [
+// 	new MetaMaskConnector({
+// 		appUrl: 'http://localhost:3000',
+// 	}),
+// 	new WalletConnectConnector({
+// 		projectId: '3f3c98042b194264687bf59e104c534a',
+// 		chains: [1],
+// 		showQrModal: true,
+// 		qrModalOptions: {
+// 			themeMode: 'dark',
+// 			themeVariables: undefined,
+// 			// chainImages: undefined,
+// 			desktopWallets: undefined,
+// 			walletImages: undefined,
+// 			mobileWallets: undefined,
+// 			enableExplorer: true,
+// 			// explorerAllowList: undefined,
+// 			// tokenImages: undefined,
+// 			privacyPolicyUrl: undefined,
+// 			// explorerDenyList: undefined,
+// 			termsOfServiceUrl: undefined,
+// 		},
+// 	}),
 	// new CoinbaseWalletConnector({
 	// 	appName: 'Vue Dapp',
 	// 	jsonRpcUrl: `https://mainnet.infura.io/v3/${infuraId}`,
 	// }),
-]
+// ]
 
 // only check whether it's in the iframe
 // if (!isNotSafeApp()) {
@@ -73,21 +73,21 @@ let connectors: Connector[] = [
 //   connectors = [safe, connectors[0]]
 // }
 
-const connectorsCreated = ref(false)
+// const connectorsCreated = ref(false)
 
-onBeforeMount(async () => {
-	const safe = new SafeConnector()
-	// check SafeAppSDK is available
-	try {
-		if (await safe.isSafeApp()) {
-			connectors = [safe]
-		}
-	} catch (err: any) {
-		console.error(err)
-	}
+// onBeforeMount(async () => {
+// 	const safe = new SafeConnector()
+// 	// check SafeAppSDK is available
+// 	try {
+// 		if (await safe.isSafeApp()) {
+// 			connectors = [safe]
+// 		}
+// 	} catch (err: any) {
+// 		console.error(err)
+// 	}
 
-	connectorsCreated.value = true
-})
+// 	connectorsCreated.value = true
+// })
 
 // const { availableNetworks } = useEthers()
 
@@ -111,7 +111,7 @@ const onClickWallet = async () => {
         await connectWith(new MetaMaskConnector({
           appUrl: 'http://localhost:3000',
         }))
-        console.log(address.value)
+
         const {data} = await fetchRandomString({
           language: "zh",
           scene: "login",
@@ -120,7 +120,8 @@ const onClickWallet = async () => {
         const from = address.value;
         const msg = `0x${Buffer.from(data, 'utf8').toString('hex')}`;
         console.log(wallet.provider)
-        const sign = await wallet.provider?.request({
+        if(wallet.provider?.request){
+          const sign = await wallet.provider?.request({
           method: 'personal_sign',
           params: [msg, from],
         });
@@ -131,6 +132,8 @@ const onClickWallet = async () => {
         })
         store2.set(STORAGE_KEY_LOGIN_INFO, loginInfo);
 				console.log(loginInfo)
+        }
+        
 
 			} catch (err: any) {
 				console.log(err)
