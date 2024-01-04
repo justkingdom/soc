@@ -85,7 +85,7 @@ export function useGetAnswerList2(account: Ref<string>) {
 
   const onRefetch = () => {
     mark.value = 0;
-    results = [];
+    // results = [];
   };
 
   watchEffect(() => {

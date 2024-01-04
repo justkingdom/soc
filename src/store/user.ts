@@ -22,7 +22,6 @@ export const useUserStore = defineStore('user', {
       if (!this.myList) {
         return new Map();
       }
-      console.log('myMaps: ', this.myList.length);
       return arrayToMap(this.myList, 'qID');
     },
   },
