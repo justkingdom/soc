@@ -27,7 +27,7 @@
   </el-menu>
   <!-- <article class="max-w-[1760px] mx-auto text-right"><wallet></wallet></article> -->
   
-  <article class="p-4 max-w-[1760px] mx-auto">
+  <article class="p-2 lg:p-4 max-w-[1760px] mx-auto">
     <router-view />
   </article>
 </template>

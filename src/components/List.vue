@@ -3,7 +3,7 @@
     <el-skeleton :rows="20" animated v-if="isLoading" />
     <div v-else>
       <el-table stripe :data="datas" :height="height">
-        <el-table-column type="index" width="48" />
+        <el-table-column type="index" width="48" v-if="!isMobile" />
         <el-table-column label="标题" min-width="20%">
           <template #default="props">
             <div>
@@ -156,11 +156,11 @@
             >
           </template>
         </el-table-column> -->
-        <el-table-column label="创建时间" min-width="12%" align="right">
+        <!-- <el-table-column label="创建时间" min-width="12%" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column label="周期" min-width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
@@ -196,12 +196,8 @@
 
 <script setup lang="ts">
 import classNames from "classnames";
-import {
-  isPositive,
-  toPercent,
-  transformCountDown,
-  formatMoment,
-} from "../utils";
+import mobile from "is-mobile";
+import { isPositive, toPercent, transformCountDown } from "../utils";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";
@@ -215,6 +211,7 @@ const props = defineProps<{
 }>();
 
 const params = useUrlSearchParams("history");
+const isMobile = mobile();
 
 const height = computed(() => {
   return window.innerHeight - HEIGHT_CONTAINER;

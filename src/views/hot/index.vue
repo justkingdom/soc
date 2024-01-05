@@ -1,6 +1,6 @@
 <template>
   <aside class="flex justify-between">
-    <div>
+    <div class="w-[300px]">
       <el-descriptions v-if="myId">
         <el-descriptions-item label="用户ID:">
           <span class="text-lg">{{ myId }}</span>
@@ -10,11 +10,10 @@
         </el-descriptions-item>
       </el-descriptions>
     </div>
-    <el-descriptions>
-      <el-descriptions-item label="总数:">
-        <span class="text-lg">{{ total }}</span>
-      </el-descriptions-item>
-    </el-descriptions>
+    <div class="flex items-center space-x-2">
+      <span>总数:</span>
+      <el-text size="large">{{ total }}</el-text>
+    </div>
   </aside>
   <List :datas="list" :is-loading="isLoading" :total="total" />
 </template>
