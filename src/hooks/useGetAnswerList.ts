@@ -64,7 +64,7 @@ export function useGetAnswerList2(account: Ref<string>) {
   const total = ref(0);
 
   let results = [] as Array<IListItem>;
-  const targetMark = moment().subtract(1, "days").valueOf();
+  const targetMark = moment().subtract(2, "days").valueOf();
 
   const fetchData = async () => {
     if (mark.value !== undefined) {
