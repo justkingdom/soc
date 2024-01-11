@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import store2 from 'store2';
 
 class HttpRequest {
   getInsideConfig() {
@@ -14,8 +15,7 @@ class HttpRequest {
       // },
       headers: {
         "Content-Type": "application/json",
-        // Authorization:
-        //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMDA2MDUxOTYiLCJsYW5ndWFnZSI6InpoX2NuIiwiZXhwIjoxNzAzOTEzODI0LCJpYXQiOjE3MDM2NTQ2MjR9.B-zMSvY8TYV93R9M2Sz9ycS3axbK-_iknJmoX7-KDuA",
+        Authorization: store2.get('Authorization'),
       },
     };
     return config;
