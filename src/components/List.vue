@@ -156,11 +156,11 @@
             >
           </template>
         </el-table-column> -->
-        <!-- <el-table-column label="创建时间" min-width="12%" align="right">
+        <el-table-column label="创建时间" min-width="12%" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
           </template>
-        </el-table-column> -->
+        </el-table-column>
         <!-- <el-table-column label="周期" min-width="200" align="right">
           <template #default="props">
             <p>{{ formatMoment(props.row.createTime) }}</p>
@@ -197,7 +197,12 @@
 <script setup lang="ts">
 import classNames from "classnames";
 import mobile from "is-mobile";
-import { isPositive, toPercent, transformCountDown } from "../utils";
+import {
+  isPositive,
+  toPercent,
+  transformCountDown,
+  formatMoment,
+} from "../utils";
 import { useUrlSearchParams } from "@vueuse/core";
 import { computed, reactive, ref, watch } from "vue";
 import { HEIGHT_CONTAINER, Phase } from "../constants";

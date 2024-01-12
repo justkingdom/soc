@@ -38,8 +38,11 @@ const computedUser = computed(() => {
   return "";
 });
 
-const { list: answerList, refetch: refetchAnswerList } =
-  useGetAnswerList(computedUser);
+const {
+  list: answerList,
+  refetch: refetchAnswerList,
+  isHidden,
+} = useGetAnswerList(computedUser);
 
 const userStore = useUserStore();
 
@@ -50,7 +53,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  if (computedUser.value) {
+  if (computedUser.value && !isHidden.value) {
     userStore.myId = computedUser.value;
   }
 });

@@ -17,6 +17,7 @@ import { onBeforeMount, ref, watch } from "vue";
 import { fetchRandomString, fetchWalletLogin } from "../apis/account";
 import store2 from "store2";
 import { STORAGE_KEY_LOGIN_INFO } from "../constants";
+import { computed } from "vue";
 // const isDev = import.meta.env.DEV
 // const infuraId = isDev ? import.meta.env.VITE_INFURA_KEY : 'ff6a249a74e048f1b413cba715f98d07'
 
@@ -29,22 +30,22 @@ const {
   onChainChanged,
   connectWith,
 } = useWallet();
-const { address, balance, chainId, isActivated, dnsAlias } = useEthers();
+const { address, chainId, isActivated } = useEthers();
 const { onActivated, onChanged } = useEthersHooks();
 
-console.log(
-  address,
-  ">>>",
-  wallet,
-  ">>>",
-  balance,
-  ">>>",
-  chainId,
-  ">>>",
-  isActivated,
-  ">>>",
-  dnsAlias
-);
+// console.log(
+//   address,
+//   ">>>",
+//   wallet,
+//   ">>>",
+//   balance,
+//   ">>>",
+//   chainId,
+//   ">>>",
+//   isActivated,
+//   ">>>",
+//   dnsAlias
+// );
 onDisconnect(() => {
   console.log("disconnect");
 });
@@ -139,21 +140,20 @@ const onClickWallet = async () => {
     });
     const from = address.value;
     const msg = `0x${Buffer.from(data, "utf8").toString("hex")}`;
-    console.log(wallet.provider);
-		if(wallet.provider?.request){
-			const sign = await wallet.provider?.request({
-				method: "personal_sign",
-				params: [msg, from],
-			});
-			console.log(sign);
-			const loginInfo = await fetchWalletLogin({
-				walletSign: sign,
-				walletAddress: address.value,
-			});
-			store2.set(STORAGE_KEY_LOGIN_INFO, loginInfo);
-			console.log(loginInfo);
-		}
-    
+    // console.log(wallet.provider);
+    if (wallet.provider?.request) {
+      const sign = await wallet.provider?.request({
+        method: "personal_sign",
+        params: [msg, from],
+      });
+      console.log(sign);
+      const loginInfo = await fetchWalletLogin({
+        walletSign: sign,
+        walletAddress: address.value,
+      });
+      store2.set(STORAGE_KEY_LOGIN_INFO, loginInfo);
+      console.log(loginInfo);
+    }
   } catch (err: any) {
     console.log(err);
   }
@@ -182,12 +182,20 @@ watch(selectedChainId, async (val, oldVal) => {
 // const connectErrorHandler = (error: any) => {
 // 	console.error('Connect error: ', error)
 // }
+const onHandleDisconnect = () => {
+  store2.remove(STORAGE_KEY_LOGIN_INFO);
+  disconnect();
+};
+
+const userInfo = computed(() => {
+  return store2.get(STORAGE_KEY_LOGIN_INFO);
+});
 </script>
 <template>
   <div class="flex items-center space-x-2 ml-4">
     <el-button
-      @click="isActivated ? disconnect() : onClickWallet()"
-			:type="isActivated ? 'warning' : 'primary'"
+      @click="isActivated ? onHandleDisconnect() : onClickWallet()"
+      :type="isActivated ? 'warning' : 'primary'"
       :disabled="wallet.status === 'connecting'"
     >
       {{
@@ -200,7 +208,16 @@ watch(selectedChainId, async (val, oldVal) => {
           : "Connect"
       }}
     </el-button>
-		<el-text type="warning">{{ shortenAddress(address) }}</el-text>
+    <div class="flex items-center space-x-1 text-white">
+      <el-text type="warning">{{ shortenAddress(address) }}</el-text>
+      <a
+        :href="`https://app.socrates.com/profile?account=${userInfo?.data?.nickname}`"
+        target="_blank"
+        class="text-white hover:underline"
+      >
+        {{ userInfo?.data?.nickname }}
+      </a>
+    </div>
   </div>
   <!-- <vd-board v-if="connectorsCreated" :connectors="connectors" :connectErrorHandler="connectErrorHandler" dark>
 

@@ -34,7 +34,7 @@ const computedUser = computed(() => {
   return "";
 });
 
-const { list: answerList, refetch: refetchAnswerList } =
+const { list: answerList, refetch: refetchAnswerList, isHidden } =
   useGetAnswerList2(computedUser);
 
 watchEffect(() => {
@@ -44,7 +44,7 @@ watchEffect(() => {
 });
 
 useIntervalFn(() => {
-  if (computedUser.value) {
+  if (computedUser.value && !isHidden.value) {
     refetchAnswerList();
   }
 }, 1000);

@@ -200,9 +200,9 @@ export function useGetListHot() {
     }
 
     try {
-      console.log("hots begin ...");
+      console.time("hots fetch ...");
       const reps = await Promise.all(requests);
-      console.log("hots end ...");
+      console.timeEnd("hots fetch ...");
       let results = [] as Array<IListItem>;
       reps.forEach((rep: BaseResponse<ListData<IListItem>>, index: number) => {
         const { records } = rep.data;

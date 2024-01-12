@@ -1,8 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import store2 from 'store2';
+import { STORAGE_KEY_LOGIN_INFO } from "../constants";
 
 class HttpRequest {
   getInsideConfig() {
+    const userInfo = store2.get(STORAGE_KEY_LOGIN_INFO);
     const config = {
       baseURL: import.meta.env.VITE_API_BASE_URL, // 所有的请求地址前缀部分(没有后端请求不用写)
       timeout: 800000, // 请求超时时间(毫秒)
@@ -15,7 +17,7 @@ class HttpRequest {
       // },
       headers: {
         "Content-Type": "application/json",
-        Authorization: store2.get('Authorization'),
+        Authorization: userInfo ? userInfo.token : undefined,
       },
     };
     return config;
